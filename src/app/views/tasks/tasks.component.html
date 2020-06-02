@@ -9,7 +9,7 @@
       <!--  цвет приоритета  -->
       <ng-container matColumnDef="color">
         <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let task" [style.background-color]="getPriorityColor(task)"
+        <td *matCellDef="let task" [style.background-color]="getPriorityColor(task)" class="col-color"
             mat-cell></td>
       </ng-container>
 
@@ -17,7 +17,7 @@
       <!-- нумерация-->
       <ng-container matColumnDef="id">
         <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let index = index;" mat-cell>
+        <td *matCellDef="let index = index;" class="col-id" mat-cell>
 
           {{index + 1}}
 
@@ -28,7 +28,7 @@
       <!-- название задачи-->
       <ng-container matColumnDef="title">
         <th *matHeaderCellDef mat-header-cell> Название</th>
-        <td *matCellDef="let task" [class.completed]="task.completed" mat-cell>
+        <td *matCellDef="let task" [class.completed]="task.completed" class="col-title" mat-cell>
 
           {{task.title}}
 
@@ -39,6 +39,7 @@
       <ng-container matColumnDef="date">
         <th *matHeaderCellDef mat-header-cell> Срок</th>
         <td *matCellDef="let task" [ngClass]="{'completed': task.completed, 'nodate': task.date == null}"
+            class="col-date"
             mat-cell>
 
           {{task.date | date: "medium"}}
@@ -49,7 +50,7 @@
       <!--приоритет-->
       <ng-container matColumnDef="priority">
         <th *matHeaderCellDef mat-header-cell> Приоритет</th>
-        <td *matCellDef="let task"
+        <td *matCellDef="let task" class="col-priority"
             [ngClass]="{'completed': task.completed, 'nopriority': task.priority == null}"
             mat-cell
         >
@@ -63,7 +64,7 @@
       <!--категория-->
       <ng-container matColumnDef="category">
         <th *matHeaderCellDef mat-header-cell> Категория</th>
-        <td *matCellDef="let task"
+        <td *matCellDef="let task" class="col-category"
             [ngClass]="{'completed': task.completed, 'nocategory': task.category == null, 'link': !task.completed && task.category}"
             mat-cell
         >
