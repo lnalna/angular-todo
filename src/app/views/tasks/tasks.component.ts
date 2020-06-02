@@ -11,8 +11,8 @@ import {MatTableDataSource} from '@angular/material/table';
 export class TasksComponent implements OnInit {
 
   // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
-  private displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
-  private dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
+  public displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
+  public dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
 
 
   tasks: Task[];
@@ -35,7 +35,7 @@ export class TasksComponent implements OnInit {
   }
 
   // в зависимости от статуса задачи - вернуть цвет названия
-  private getPriorityColor(task: Task) {
+  public getPriorityColor(task: Task) {
 
     if (task.priority && task.priority.color) {
       return task.priority.color;
