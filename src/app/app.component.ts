@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataHandlerService} from './service/data-handler.service';
 import { Task } from './model/Task';
+import {Category} from './model/Category';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { Task } from './model/Task';
 export class AppComponent implements OnInit {
   title = 'Todo';
   tasks: Task[];
+  categories: Category[];
 
   constructor(
     private dataHandler: DataHandlerService, // фасад для работы с данными
@@ -18,6 +20,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
+    this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
   }
 
 
