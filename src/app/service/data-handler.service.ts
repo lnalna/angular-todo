@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Category} from '../model/Category';
-import {TestData} from '../data/TestData';
 import {Task} from '../model/Task';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {TaskDAOArray} from '../data/dao/impl/TaskDAOArray';
 
+// класс реализовывает методы, которые нужны frontend'у, т.е. для удобной работы представлений
+// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала
+// сервис не реализовывает напрямую интерфейсы DAO, а использует их реализации (в данном случае массивы)
+// может использовать не все методы DAO, а только нужные
 @Injectable({
   providedIn: 'root'
 })

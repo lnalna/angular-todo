@@ -12,7 +12,7 @@ export class TaskDAOArray implements TaskDAO {
   }
 
   get(id: number): Observable<Task> {
-    return undefined;
+    return of(TestData.tasks.find(todo => todo.id === id));
   }
 
 
