@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Task} from '../model/Task';
 import {Observable} from 'rxjs';
 import {TaskDAOArray} from '../data/dao/impl/TaskDAOArray';
+import {CategoryDAOArray} from '../data/dao/impl/CategoryDAOArray';
+import {Category} from '../model/Category';
 
 // класс реализовывает методы, которые нужны frontend'у, т.е. для удобной работы представлений
 // напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала
@@ -15,6 +17,7 @@ export class DataHandlerService {
   // релизации работы с данными с помощью массива
   // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
   private taskDaoArray = new TaskDAOArray();
+  private categoryDaoArray = new CategoryDAOArray();
 
 
   constructor() {
@@ -24,5 +27,7 @@ export class DataHandlerService {
     return this.taskDaoArray.getAll();
   }
 
-
+  getAllCategories(): Observable<Category[]> {
+    return this.categoryDaoArray.getAll();
+  }
 }
