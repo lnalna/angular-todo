@@ -1,5 +1,4 @@
 // стандартные методы CRUD (create, read, udpate, delete)
-
 import {Observable} from 'rxjs';
 
 // все методы возвращают Observable - для асинхронности и работы в реактивном стиле

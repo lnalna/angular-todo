@@ -1,5 +1,6 @@
-import {Priority} from "./Priority";
-import {Category} from "./Category";
+import {Category} from './Category';
+import {Priority} from './Priority';
+
 
 export class Task {
     id: number;
