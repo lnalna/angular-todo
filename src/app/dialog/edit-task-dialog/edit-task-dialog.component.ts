@@ -10,6 +10,9 @@ import {DataHandlerService} from '../../service/data-handler.service';
 })
 export class EditTaskDialogComponent implements OnInit {
 
+  private dialogTitle: string; // заголовок окна
+  task: Task; // задача для редактирования/создания
+
   constructor(
     private dialogRef: MatDialogRef<EditTaskDialogComponent>, // для возможности работы с текущим диалог. окном
     @Inject(MAT_DIALOG_DATA) private data: [Task, string], // данные, которые передали в диалоговое окно
@@ -18,17 +21,10 @@ export class EditTaskDialogComponent implements OnInit {
   ) {
   }
 
-  private dialogTitle: string; // заголовок окна
-  private task: Task; // задача для редактирования/создания
-
-
-
   ngOnInit() {
     this.task = this.data[0]; // задача для редактирования/создания
     this.dialogTitle = this.data[1]; // текст для диалогового окна
 
-    console.log(this.task);
-    console.log(this.dialogTitle);
 
   }
 
