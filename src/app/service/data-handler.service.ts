@@ -5,6 +5,7 @@ import {Priority} from '../model/Priority';
 import {TaskDAOArray} from '../data/dao/impl/TaskDAOArray';
 import {CategoryDAOArray} from '../data/dao/impl/CategoryDAOArray';
 import {Observable} from 'rxjs';
+import {PriorityDAOArray} from '../data/dao/impl/PriorityDAOArray';
 
 
 
@@ -18,25 +19,32 @@ import {Observable} from 'rxjs';
 })
 export class DataHandlerService {
 
-    // релизации работы с данными с помощью массива
-    // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
-    private taskDaoArray = new TaskDAOArray();
-    private categoryDaoArray = new CategoryDAOArray();
+  // релизации работы с данными с помощью массива
+  // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
+  private taskDaoArray = new TaskDAOArray();
+  private categoryDaoArray = new CategoryDAOArray();
+  private priorityDaoArray = new PriorityDAOArray();
 
-    constructor() {
-    }
 
-    getAllTasks(): Observable<Task[]> {
-        return this.taskDaoArray.getAll();
-    }
+  constructor() {
+  }
 
-    getAllCategories(): Observable<Category[]> {
-        return this.categoryDaoArray.getAll();
-    }
+  getAllTasks(): Observable<Task[]> {
+    return this.taskDaoArray.getAll();
+  }
 
-    // поиск задач по параметрам
-    searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
-        return this.taskDaoArray.search(category, searchText, status, priority);
-    }
+  getAllCategories(): Observable<Category[]> {
+    return this.categoryDaoArray.getAll();
+  }
+
+  getAllPriorities(): Observable<Priority[]> {
+    return this.priorityDaoArray.getAll();
+  }
+
+  // поиск задач по параметрам
+  searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
+    return this.taskDaoArray.search(category, searchText, status, priority);
+  }
+
 
 }

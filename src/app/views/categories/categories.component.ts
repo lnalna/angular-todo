@@ -9,34 +9,34 @@ import {Category} from '../../model/Category';
 })
 export class CategoriesComponent implements OnInit {
 
-    @Input()
-    categories: Category[];
+  @Input()
+  categories: Category[];
 
-    // выбрали категорию из списка
-    @Output()
-    selectCategory = new EventEmitter<Category>();
+  // выбрали категорию из списка
+  @Output()
+  selectCategory = new EventEmitter<Category>();
 
-    selectedCategory: Category;
+  selectedCategory: Category;
 
-    constructor(private dataHandler: DataHandlerService) {
+  constructor(private dataHandler: DataHandlerService) {
+  }
+
+  // метод вызывается автоматически после инициализации компонента
+  ngOnInit() {
+    // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
+  }
+
+
+  showTasksByCategory(category: Category): void {
+
+    // если не изменилось значение, ничего не делать (чтобы лишний раз не делать запрос данных)
+    if (this.selectedCategory === category) {
+      return;
     }
 
-    // метод вызывается автоматически после инициализации компонента
-    ngOnInit() {
-        // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
-    }
+    this.selectedCategory = category; // сохраняем выбранную категорию
 
-
-    showTasksByCategory(category: Category) {
-
-        // если не изменилось значение, ничего не делать (чтобы лишний раз не делать запрос данных)
-        if (this.selectedCategory === category) {
-            return;
-        }
-
-        this.selectedCategory = category; // сохраняем выбранную категорию
-
-        // вызываем внешний обработчик и передаем туда выбранную категорию
-        this.selectCategory.emit(this.selectedCategory);
-    }
+    // вызываем внешний обработчик и передаем туда выбранную категорию
+    this.selectCategory.emit(this.selectedCategory);
+  }
 }
