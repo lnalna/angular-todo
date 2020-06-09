@@ -87,4 +87,15 @@ export class EditTaskDialogComponent implements OnInit {
     });
   }
 
+  // нажали Выполнить (завершить) задачу
+  complete() {
+    this.dialogRef.close('complete');
+
+  }
+
+  // делаем статус задачи "незавершенным" (активируем)
+  activate() {
+    this.dialogRef.close('activate');
+  }
+
 }
