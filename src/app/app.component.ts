@@ -10,55 +10,58 @@ import {Category} from './model/Category';
 })
 export class AppComponent implements OnInit {
 
-    title = 'Todo';
-    tasks: Task[];
-    categories: Category[];
+  title = 'Todo';
+  tasks: Task[];
+  categories: Category[];
 
-     selectedCategory: Category = null;
-
-
-    constructor(
-        private dataHandler: DataHandlerService, // фасад для работы с данными
-    ) {
-    }
-
-    ngOnInit(): void {
-        // this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
-        this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
-
-        this.onSelectCategory(null); // показать все задачи
-
-    }
+  selectedCategory: Category = null;
 
 
-    // изменение категории
-    onSelectCategory(category: Category) {
+  constructor(
+    private dataHandler: DataHandlerService, // фасад для работы с данными
+  ) {
+  }
 
-        this.selectedCategory = category;
+  ngOnInit(): void {
+    // this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
+    this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
 
-        this.dataHandler.searchTasks(
-            this.selectedCategory,
-            null,
-            null,
-            null
-        ).subscribe(tasks => {
-            this.tasks = tasks;
-        });
+    this.onSelectCategory(null); // показать все задачи
 
-    }
+  }
 
-    onUpdateTask(task: Task) {
-      this.dataHandler.updateTask(task).subscribe(() => {
-        this.dataHandler.searchTasks(
-          this.selectedCategory,
-          null,
-          null,
-          null
-        ).subscribe(tasks => {
-          this.tasks = tasks;
-        });
+
+  // изменение категории
+  onSelectCategory(category: Category) {
+
+    this.selectedCategory = category;
+
+    this.dataHandler.searchTasks(
+      this.selectedCategory,
+      null,
+      null,
+      null
+    ).subscribe(tasks => {
+      this.tasks = tasks;
+    });
+
+  }
+
+  // обновление задачи
+  onUpdateTask(task: Task) {
+
+    this.dataHandler.updateTask(task).subscribe(() => {
+      this.dataHandler.searchTasks(
+        this.selectedCategory,
+        null,
+        null,
+        null
+      ).subscribe(tasks => {
+        this.tasks = tasks;
       });
-    }
+    });
+
+  }
 
   // удаление задачи
   onDeleteTask(task: Task) {
@@ -73,8 +76,5 @@ export class AppComponent implements OnInit {
         this.tasks = tasks;
       });
     });
-
-
   }
-
 }
