@@ -19,6 +19,9 @@ export class CategoriesComponent implements OnInit {
   @Input()
   selectedCategory: Category;
 
+  // для отображения иконки редактирования при наведении на категорию
+  indexMouseMove: number;
+
   constructor(private dataHandler: DataHandlerService) {
   }
 
@@ -39,5 +42,16 @@ export class CategoriesComponent implements OnInit {
 
     // вызываем внешний обработчик и передаем туда выбранную категорию
     this.selectCategory.emit(this.selectedCategory);
+  }
+
+  // сохраняет индекс записи категории, над который в данный момент проходит мышка (и там отображается иконка редактирования)
+  showEditIcon(index: number) {
+    this.indexMouseMove = index;
+
+  }
+
+  // диалоговое окно для редактирования категории
+  openEditDialog(category: Category) {
+    console.log(category.title);
   }
 }
