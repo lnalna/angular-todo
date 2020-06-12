@@ -46,31 +46,9 @@ export class AppComponent implements OnInit {
 
     this.selectedCategory = category;
 
-    this.dataHandler.searchTasks(
-      this.selectedCategory,
-      null,
-      null,
-      null
-    ).subscribe(tasks => {
-      this.tasks = tasks;
-    });
-
-  }
-  // обновление задачи
-  onUpdateTask(task: Task) {
-
     this.updateTasks();
 
   }
-
-  // удаление задачи
-  onDeleteTask(task: Task) {
-
-    this.dataHandler.deleteTask(task.id).subscribe(cat => {
-      this.updateTasks();
-    });
-  }
-
 
   // удаление категории
   onDeleteCategory(category: Category) {
@@ -84,6 +62,23 @@ export class AppComponent implements OnInit {
   onUpdateCategory(category: Category) {
     this.dataHandler.updateCategory(category).subscribe(() => {
       this.onSelectCategory(this.selectedCategory);
+    });
+  }
+
+  // обновление задачи
+  onUpdateTask(task: Task) {
+
+    this.dataHandler.updateTask(task).subscribe(cat => {
+      this.updateTasks();
+    });
+
+  }
+
+  // удаление задачи
+  onDeleteTask(task: Task) {
+
+    this.dataHandler.deleteTask(task.id).subscribe(cat => {
+      this.updateTasks();
     });
   }
 
@@ -115,5 +110,17 @@ export class AppComponent implements OnInit {
     ).subscribe((tasks: Task[]) => {
       this.tasks = tasks;
     });
+  }
+
+
+  // добавление задачи
+  onAddTask(task: Task) {
+
+    this.dataHandler.addTask(task).subscribe(result => {
+
+      this.updateTasks();
+
+    });
+
   }
 }

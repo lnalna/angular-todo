@@ -41,6 +41,7 @@ export class DataHandlerService {
     return this.priorityDaoArray.getAll();
   }
 
+
   updateTask(task: Task): Observable<Task> {
     return this.taskDaoArray.update(task);
   }
@@ -55,12 +56,17 @@ export class DataHandlerService {
     return this.taskDaoArray.delete(id);
   }
 
+
   updateCategory(category: Category): Observable<Category> {
     return this.categoryDaoArray.update(category);
   }
 
   deleteCategory(id: number): Observable<Category> {
     return this.categoryDaoArray.delete(id);
+  }
+
+  addTask(task: Task): Observable<Task> {
+    return this.taskDaoArray.add(task);
   }
 
 }
