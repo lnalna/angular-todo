@@ -17,8 +17,8 @@ import {Category} from '../../model/Category';
 })
 export class TasksComponent implements OnInit {
 
-// поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
-  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
+  @Output()
+  deleteTask = new EventEmitter<Task>();
   dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
 
   // ссылки на компоненты таблицы
@@ -27,14 +27,27 @@ export class TasksComponent implements OnInit {
 
 
   @Output()
-  deleteTask = new EventEmitter<Task>();
+  selectCategory = new EventEmitter<Category>(); // нажали на категорию из списка задач
 
   @Output()
   updateTask = new EventEmitter<Task>();
 
   @Output()
-  selectCategory = new EventEmitter<Category>(); // нажали на категорию из списка задач
+  filterByTitle = new EventEmitter<string>();
 
+  @Output()
+  filterByStatus = new EventEmitter<boolean>();
+
+
+
+  // поиск
+  searchTaskText: string; // текущее значение для поиска задач
+  selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
+
+
+
+  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
+  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
 
   tasks: Task[];
 
@@ -44,6 +57,8 @@ export class TasksComponent implements OnInit {
     this.tasks = tasks;
     this.fillTable();
   }
+
+
 
   constructor(
     private dataHandler: DataHandlerService, // доступ к данным
@@ -164,7 +179,10 @@ export class TasksComponent implements OnInit {
   openDeleteDialog(task: Task) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
-      data: {dialogTitle: 'Подтвердите действие', message: `Вы действительно хотите удалить задачу: "${task.title}"?`},
+      data: {
+        dialogTitle: 'Подтвердите действие',
+        message: `Вы действительно хотите удалить задачу: "${task.title}"?`
+      },
       autoFocus: false
     });
 
@@ -183,5 +201,20 @@ export class TasksComponent implements OnInit {
 
   onSelectCategory(category: Category) {
     this.selectCategory.emit(category);
+  }
+
+  // фильтрация по названию
+  onFilterByTitle() {
+    this.filterByTitle.emit(this.searchTaskText);
+  }
+
+  // фильтрация по статусу
+  onFilterByStatus(value: boolean) {
+
+    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
+    if (value !== this.selectedStatusFilter) {
+      this.selectedStatusFilter = value;
+      this.filterByStatus.emit(this.selectedStatusFilter);
+    }
   }
 }
