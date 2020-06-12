@@ -16,60 +16,62 @@ import {Task} from '../model/Task';
     providedIn: 'root'
 })
 export class DataHandlerService {
+  // релизации работы с данными с помощью массива
+  // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
+  taskDaoArray = new TaskDAOArray();
+  categoryDaoArray = new CategoryDAOArray();
+  priorityDaoArray = new PriorityDAOArray();
 
-    // релизации работы с данными с помощью массива
-    // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
-    taskDaoArray = new TaskDAOArray();
-    categoryDaoArray = new CategoryDAOArray();
-    priorityDaoArray = new PriorityDAOArray();
+  constructor() {
+  }
 
+  getAllTasks(): Observable<Task[]> {
+    return this.taskDaoArray.getAll();
+  }
 
-    constructor() {
-    }
+  getAllCategories(): Observable<Category[]> {
+    return this.categoryDaoArray.getAll();
+  }
 
-    getAllTasks(): Observable<Task[]> {
-        return this.taskDaoArray.getAll();
-    }
-
-    getAllCategories(): Observable<Category[]> {
-        return this.categoryDaoArray.getAll();
-    }
-
-    getAllPriorities(): Observable<Priority[]> {
-        return this.priorityDaoArray.getAll();
-    }
+  getAllPriorities(): Observable<Priority[]> {
+    return this.priorityDaoArray.getAll();
+  }
 
 
-    updateTask(task: Task): Observable<Task> {
-        return this.taskDaoArray.update(task);
-    }
+  updateTask(task: Task): Observable<Task> {
+    return this.taskDaoArray.update(task);
+  }
 
 
-    // поиск задач по параметрам
-    searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
-        return this.taskDaoArray.search(category, searchText, status, priority);
-    }
+  // поиск задач по параметрам
+  searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
+    return this.taskDaoArray.search(category, searchText, status, priority);
+  }
 
-    deleteTask(id: number): Observable<Task> {
-        return this.taskDaoArray.delete(id);
-    }
+  deleteTask(id: number): Observable<Task> {
+    return this.taskDaoArray.delete(id);
+  }
 
 
-    updateCategory(category: Category): Observable<Category> {
-        return this.categoryDaoArray.update(category);
-    }
+  updateCategory(category: Category): Observable<Category> {
+    return this.categoryDaoArray.update(category);
+  }
 
-    deleteCategory(id: number): Observable<Category> {
-        return this.categoryDaoArray.delete(id);
-    }
+  deleteCategory(id: number): Observable<Category> {
+    return this.categoryDaoArray.delete(id);
+  }
 
-    addTask(task: Task): Observable<Task> {
-        return this.taskDaoArray.add(task);
-    }
+  addTask(task: Task): Observable<Task> {
+    return this.taskDaoArray.add(task);
+  }
 
-    addCategory(title: string): Observable<Category> {
-        return this.categoryDaoArray.add(new Category(null, title));
-    }
+  addCategory(title: string): Observable<Category> {
+    return this.categoryDaoArray.add(new Category(null, title));
+  }
 
+
+  searchCategories(title: string): Observable<Category[]> {
+    return this.categoryDaoArray.search(title);
+  }
 
 }
