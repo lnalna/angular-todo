@@ -23,6 +23,10 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {registerLocaleData} from '@angular/common';
 import {TaskDatePipe} from './pipe/task-date.pipe';
 import {MatButtonModule} from '@angular/material/button';
+import { FooterComponent } from './views/footer/footer.component';
+import { HeaderComponent } from './views/header/header.component';
+import { StatComponent } from './views/stat/stat.component';
+import {AboutDialogComponent} from './dialog/about/about-dialog.component';
 registerLocaleData(localeRu);
 
 @NgModule({
@@ -33,7 +37,11 @@ registerLocaleData(localeRu);
         EditTaskDialogComponent,
         ConfirmDialogComponent,
         TaskDatePipe,
-        EditCategoryDialogComponent
+        EditCategoryDialogComponent,
+        FooterComponent,
+        AboutDialogComponent,
+        HeaderComponent,
+        StatComponent
     ],
     imports: [
         BrowserModule,
@@ -57,7 +65,8 @@ registerLocaleData(localeRu);
     entryComponents: [
         EditTaskDialogComponent,
         ConfirmDialogComponent,
-        EditCategoryDialogComponent
+        EditCategoryDialogComponent,
+        AboutDialogComponent
     ],
     bootstrap: [AppComponent]
 })
