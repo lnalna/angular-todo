@@ -8,6 +8,7 @@ import {EditTaskDialogComponent} from '../../dialog/edit-task-dialog/edit-task-d
 import {ConfirmDialogComponent} from '../../dialog/confirm-dialog/confirm-dialog.component';
 import {Task} from '../../model/Task';
 import {Category} from '../../model/Category';
+import {Priority} from '../../model/Priority';
 
 
 @Component({
@@ -38,17 +39,20 @@ export class TasksComponent implements OnInit {
   @Output()
   filterByStatus = new EventEmitter<boolean>();
 
-
+  @Output()
+  filterByPriority = new EventEmitter<Priority>();
 
   // поиск
   searchTaskText: string; // текущее значение для поиска задач
   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
+  selectedPriorityFilter: Priority = null;   // по-умолчанию будут показываться задачи по всем приоритетам
 
 
 
   // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
   displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
 
+  priorities: Priority[]; // список приоритетов (для фильтрации задач)
   tasks: Task[];
 
   // текущие задачи для отображения на странице
@@ -58,7 +62,10 @@ export class TasksComponent implements OnInit {
     this.fillTable();
   }
 
-
+  @Input('priorities')
+  private set setPriorities(priorities: Priority[]) {
+    this.priorities = priorities;
+  }
 
   constructor(
     private dataHandler: DataHandlerService, // доступ к данным
@@ -215,6 +222,16 @@ export class TasksComponent implements OnInit {
     if (value !== this.selectedStatusFilter) {
       this.selectedStatusFilter = value;
       this.filterByStatus.emit(this.selectedStatusFilter);
+    }
+  }
+
+  // фильтрация по приоритету
+  onFilterByPriority(value: Priority) {
+
+    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
+    if (value !== this.selectedPriorityFilter) {
+      this.selectedPriorityFilter = value;
+      this.filterByPriority.emit(this.selectedPriorityFilter);
     }
   }
 }
