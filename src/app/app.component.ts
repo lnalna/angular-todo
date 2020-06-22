@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {DataHandlerService} from "./service/data-handler.service";
+import {DataHandlerService} from './service/data-handler.service';
 import {Task} from './model/Task';
-import {Category} from "./model/Category";
-import {Priority} from "./model/Priority";
+import {Category} from './model/Category';
+import {Priority} from './model/Priority';
+import {zip} from 'rxjs';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styles: []
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styles: []
 })
 export class AppComponent implements OnInit {
 
@@ -15,6 +16,12 @@ export class AppComponent implements OnInit {
   tasks: Task[];
   categories: Category[]; // все категории
   priorities: Priority[]; // все приоритеты
+
+  // статистика
+  totalTasksCountInCategory: number;
+  completedCountInCategory: number;
+  uncompletedCountInCategory: number;
+  uncompletedTotalTasksCount: number;
 
 
   selectedCategory: Category = null;
@@ -48,7 +55,7 @@ export class AppComponent implements OnInit {
 
     this.selectedCategory = category;
 
-    this.updateTasks();
+    this.updateTasksAndStat();
 
   }
 
@@ -71,7 +78,7 @@ export class AppComponent implements OnInit {
   onUpdateTask(task: Task) {
 
     this.dataHandler.updateTask(task).subscribe(cat => {
-      this.updateTasks();
+      this.updateTasksAndStat();
     });
 
   }
@@ -80,9 +87,10 @@ export class AppComponent implements OnInit {
   onDeleteTask(task: Task) {
 
     this.dataHandler.deleteTask(task.id).subscribe(cat => {
-      this.updateTasks();
+      this.updateTasksAndStat();
     });
   }
+
 
   // поиск задач
   onSearchTasks(searchString: string) {
@@ -102,7 +110,7 @@ export class AppComponent implements OnInit {
     this.updateTasks();
   }
 
-  updateTasks() {
+  private updateTasks() {
     this.dataHandler.searchTasks(
       this.selectedCategory,
       this.searchTaskText,
@@ -113,12 +121,13 @@ export class AppComponent implements OnInit {
     });
   }
 
+
   // добавление задачи
   onAddTask(task: Task) {
 
     this.dataHandler.addTask(task).subscribe(result => {
 
-      this.updateTasks();
+      this.updateTasksAndStat();
 
     });
 
@@ -135,10 +144,38 @@ export class AppComponent implements OnInit {
 
   // поиск категории
   onSearchCategory(title: string) {
+
     this.searchCategoryText = title;
 
     this.dataHandler.searchCategories(title).subscribe(categories => {
       this.categories = categories;
     });
   }
+
+  // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
+  updateTasksAndStat() {
+
+    this.updateTasks(); // обновить список задач
+
+    // обновить переменные для статистики
+    this.updateStat();
+
+  }
+
+  // обновить статистику
+  private updateStat() {
+    zip(
+      this.dataHandler.getTotalCountInCategory(this.selectedCategory),
+      this.dataHandler.getCompletedCountInCategory(this.selectedCategory),
+      this.dataHandler.getUncompletedCountInCategory(this.selectedCategory),
+      this.dataHandler.getUncompletedTotalCount())
+
+      .subscribe(array => {
+        this.totalTasksCountInCategory = array[0];
+        this.completedCountInCategory = array[1];
+        this.uncompletedCountInCategory = array[2];
+        this.uncompletedTotalTasksCount = array[3]; // нужно для категории Все
+      });
+  }
+
 }

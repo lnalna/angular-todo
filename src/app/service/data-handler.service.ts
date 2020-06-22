@@ -3,24 +3,27 @@
 // сервис не реализовывает напрямую интерфейсы DAO, а использует их реализации (в данном случае массивы)
 // может использовать не все методы DAO, а только нужные
 
+
 import {Injectable} from '@angular/core';
-import {PriorityDAOArray} from '../data/dao/impl/PriorityDAOArray';
-import {Category} from '../model/Category';
-import {Priority} from '../model/Priority';
 import {TaskDAOArray} from '../data/dao/impl/TaskDAOArray';
 import {CategoryDAOArray} from '../data/dao/impl/CategoryDAOArray';
+import {PriorityDAOArray} from '../data/dao/impl/PriorityDAOArray';
 import {Observable} from 'rxjs';
+import {Category} from '../model/Category';
+import {Priority} from '../model/Priority';
 import {Task} from '../model/Task';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DataHandlerService {
+
   // релизации работы с данными с помощью массива
   // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
-  taskDaoArray = new TaskDAOArray();
-  categoryDaoArray = new CategoryDAOArray();
-  priorityDaoArray = new PriorityDAOArray();
+  private taskDaoArray = new TaskDAOArray();
+  private categoryDaoArray = new CategoryDAOArray();
+  private priorityDaoArray = new PriorityDAOArray();
+
 
   constructor() {
   }
@@ -74,4 +77,21 @@ export class DataHandlerService {
     return this.categoryDaoArray.search(title);
   }
 
+  // статистика
+
+  getCompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getCompletedCountInCategory(category);
+  }
+
+  getUncompletedTotalCount(): Observable<number> {
+    return this.taskDaoArray.getUncompletedCountInCategory(null);
+  }
+
+  getUncompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getUncompletedCountInCategory(category);
+  }
+
+  getTotalCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getTotalCountInCategory(category);
+  }
 }
