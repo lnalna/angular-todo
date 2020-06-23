@@ -16,7 +16,10 @@
 
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
 
-      <app-header></app-header>
+      <!--    навигация с шапкой и списком категорий-->
+
+      <app-header
+        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"></app-header>
 
     </nav>
 
