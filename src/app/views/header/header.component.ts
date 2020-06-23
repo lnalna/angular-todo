@@ -12,6 +12,12 @@ export class HeaderComponent implements OnInit {
   @Input()
   categoryName: string;
 
+  @Input()
+  showStat: boolean;
+
+  @Output()
+  toggleStat = new EventEmitter<boolean>(); // показать/скрыть статистику
+
 
   constructor() {
   }
@@ -19,6 +25,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-
+  onToggleStat() {
+    this.toggleStat.emit(!this.showStat); // вкл/выкл статистику
+  }
 
 }

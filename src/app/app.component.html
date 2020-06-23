@@ -19,7 +19,11 @@
       <!--    навигация с шапкой и списком категорий-->
 
       <app-header
-        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"></app-header>
+        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
+        (toggleStat)="toggleStat($event)"
+        [showStat]="showStat"
+
+      ></app-header>
 
     </nav>
 
@@ -32,6 +36,7 @@
           [totalTasksInCategory]="totalTasksCountInCategory"
           [completeTasksInCategory]="completedCountInCategory"
           [uncompleteTasksInCategory]="uncompletedCountInCategory"
+          [showStat]="showStat"
         ></app-stat>
 
         <div class="row">
