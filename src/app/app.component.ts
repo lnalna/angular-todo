@@ -162,7 +162,12 @@ export class AppComponent implements OnInit {
       )).subscribe(result => {
 
       const t = result.t as Task;
-      this.categoryMap.set(t.category, result.count);
+
+      // если указана категория - обновляем счетчик для соотв. категории
+      // чтобы не обновлять весь список - обновим точечно
+      if (t.category) {
+        this.categoryMap.set(t.category, result.count);
+      }
 
       this.updateTasksAndStat();
 
@@ -190,7 +195,7 @@ export class AppComponent implements OnInit {
     this.updateTasks();
   }
 
-  updateTasks(): void {
+  private updateTasks(): void {
     this.dataHandler.searchTasks(
       this.selectedCategory,
       this.searchTaskText,
@@ -229,6 +234,7 @@ export class AppComponent implements OnInit {
       const t = result.t as Task;
 
       // если указана категория - обновляем счетчик для соотв. категории
+      // чтобы не обновлять весь список - обновим точечно
       if (t.category) {
         this.categoryMap.set(t.category, result.count);
       }
@@ -252,7 +258,7 @@ export class AppComponent implements OnInit {
   }
 
   // обновить статистику
-  updateStat(): void {
+  private updateStat(): void {
     zip(
       this.dataHandler.getTotalCountInCategory(this.selectedCategory),
       this.dataHandler.getCompletedCountInCategory(this.selectedCategory),
