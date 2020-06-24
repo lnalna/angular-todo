@@ -6,6 +6,7 @@
     (updateCategory)="onUpdateCategory($event)"
     (addCategory)="onAddCategory($event)"
     (searchCategory)="onSearchCategory($event)"
+    [categoryMap]="categoryMap"
 
 
     [selectedCategory]="selectedCategory"
@@ -19,8 +20,8 @@
       <!--    навигация с шапкой и списком категорий-->
 
       <app-header
-        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
         (toggleStat)="toggleStat($event)"
+        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
         [showStat]="showStat"
 
       ></app-header>
@@ -33,10 +34,10 @@
 
         <!-- статистика -->
         <app-stat
-          [totalTasksInCategory]="totalTasksCountInCategory"
           [completeTasksInCategory]="completedCountInCategory"
-          [uncompleteTasksInCategory]="uncompletedCountInCategory"
           [showStat]="showStat"
+          [totalTasksInCategory]="totalTasksCountInCategory"
+          [uncompleteTasksInCategory]="uncompletedCountInCategory"
         ></app-stat>
 
         <div class="row">

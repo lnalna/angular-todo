@@ -76,12 +76,12 @@
 
 
         <li
-          (click)="showTasksByCategory(category)" (mouseenter)="showEditIcon(index)"
-
-          *ngFor="let category of categories; let index = index "
+          (click)="showTasksByCategory(mapValue.key)" (mouseenter)="showEditIcon(index)"
 
           (mouseleave)="showEditIcon(null)"
-          [class.active]="category === selectedCategory"
+
+          *ngFor="let mapValue of selectedCategoryMap | keyvalue; let index = index"
+          [class.active]="mapValue.key === selectedCategory"
 
 
           class="nav-item pointer"
@@ -90,7 +90,7 @@
           <a class="nav-link">
 
             <!--          название категории-->
-            <span class="category-title">{{category.title}}</span>
+            <span class="category-title">{{mapValue.key.title}}</span>
 
 
             <!--         кнопка редактирования категории-->
@@ -98,7 +98,7 @@
 
             <mat-icon
               *ngIf="indexMouseMove === index"
-              (click)="$event.stopPropagation(); openEditDialog(category)"
+              (click)="$event.stopPropagation(); openEditDialog(mapValue.key)"
 
               class="edit-category-icon"
 
@@ -109,6 +109,10 @@
 
 
           </span>
+
+
+            <!--сколько невыполненных задач-->
+            <span class="uncompleted-count"> {{mapValue.value}}</span>
 
 
           </a>

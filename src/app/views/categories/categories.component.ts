@@ -1,15 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {DataHandlerService} from '../../service/data-handler.service';
 import {Category} from '../../model/Category';
-import {OperType} from '../../dialog/OperType';
 import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
-
+import {MatDialog} from '@angular/material/dialog';
+import {OperType} from '../../dialog/OperType';
 
 @Component({
-    selector: 'app-categories',
-    templateUrl: './categories.component.html',
-    styleUrls: ['./categories.component.css']
+  selector: 'app-categories',
+  templateUrl: './categories.component.html',
+  styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit {
 
@@ -18,6 +17,14 @@ export class CategoriesComponent implements OnInit {
 
   @Input()
   selectedCategory: Category;
+
+  // категории с кол-вом активных задач для каждой из них
+  @Input('categoryMap')
+  set setCategoryMap(categoryMap: Map<Category, number>) {
+    this.selectedCategoryMap = categoryMap;
+  }
+
+
 
 
   // выбрали категорию из списка
@@ -44,6 +51,8 @@ export class CategoriesComponent implements OnInit {
   // для отображения иконки редактирования при наведении на категорию
   indexMouseMove: number;
   searchCategoryTitle: string; // текущее значение для поиска категорий
+
+  selectedCategoryMap: Map<Category, number>; // список всех категорий и кол-во активных задач
 
 
   constructor(
@@ -74,13 +83,13 @@ export class CategoriesComponent implements OnInit {
   }
 
   // сохраняет индекс записи категории, над который в данный момент проходит мышка (и там отображается иконка редактирования)
-  showEditIcon(index: number) {
+  showEditIcon(index: number): void {
     this.indexMouseMove = index;
 
   }
 
   // диалоговое окно для редактирования категории
-  openEditDialog(category: Category) {
+  openEditDialog(category: Category): void {
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
       data: [category.title, 'Редактирование категории', OperType.EDIT],
       width: '400px'
@@ -105,7 +114,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   // диалоговое окно для добавления категории
-  openAddDialog() {
+  openAddDialog(): void {
 
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
       data: ['', 'Добавление категории', OperType.ADD],
@@ -120,12 +129,14 @@ export class CategoriesComponent implements OnInit {
   }
 
   // поиск категории
-  search() {
-    if (this.searchCategoryTitle == null ) {
+  search(): void {
+
+
+    if (this.searchCategoryTitle == null) {
       return;
     }
+
     this.searchCategory.emit(this.searchCategoryTitle);
 
   }
-
 }
