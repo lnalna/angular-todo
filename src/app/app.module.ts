@@ -29,8 +29,9 @@ import {StatComponent} from './views/stat/stat.component';
 import {AboutDialogComponent} from './dialog/about/about-dialog.component';
 import {StatCardComponent} from './views/stat/stat-card/stat-card.component';
 import {PrioritiesComponent} from './views/priorities/priorities.component';
-import {ColorPickerModule} from "ngx-color-picker";
+import {ColorPickerModule} from 'ngx-color-picker';
 import { SettingsDialogComponent } from './dialog/settings-dialog/settings-dialog.component';
+import { EditPriorityDialogComponent } from './dialog/edit-priority-dialog/edit-priority-dialog.component';
 
 registerLocaleData(localeRu);
 
@@ -49,7 +50,8 @@ registerLocaleData(localeRu);
         StatComponent,
         StatCardComponent,
         PrioritiesComponent,
-        SettingsDialogComponent
+        SettingsDialogComponent,
+        EditPriorityDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -75,7 +77,9 @@ registerLocaleData(localeRu);
         EditTaskDialogComponent,
         ConfirmDialogComponent,
         EditCategoryDialogComponent,
-        AboutDialogComponent
+        AboutDialogComponent,
+        SettingsDialogComponent,
+      EditPriorityDialogComponent
     ],
     bootstrap: [AppComponent]
 })
