@@ -94,9 +94,12 @@ export class AppComponent implements OnInit {
 
   // добавление категории
   onAddCategory(title: string): void {
-    this.dataHandler.addCategory(title).subscribe(() => this.fillCategories());
+    this.dataHandler.addCategory(title).subscribe(categories => {
+        this.onSearchCategory(this.searchCategoryText);
+        this.fillCategories();
+      }
+    );
   }
-
 
 
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
@@ -140,7 +143,6 @@ export class AppComponent implements OnInit {
     }
 
   }
-
 
 
   // удаление категории

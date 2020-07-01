@@ -62,4 +62,6 @@ export class HeaderComponent implements OnInit {
   onToggleMenu() {
     this.toggleMenu.emit(); // показать/скрыть меню
   }
+
+
 }

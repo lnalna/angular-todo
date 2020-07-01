@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DataHandlerService} from '../../service/data-handler.service';
 import {Category} from '../../model/Category';
-import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
+import {DataHandlerService} from '../../service/data-handler.service';
 import {MatDialog} from '@angular/material/dialog';
-import {OperType} from '../../dialog/OperType';
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
+import {OperType} from '../../dialog/OperType';
+
 
 @Component({
   selector: 'app-categories',
@@ -44,22 +45,13 @@ export class CategoriesComponent implements OnInit {
   searchCategory = new EventEmitter<string>(); // передаем строку для поиска
 
 
-  // категории с кол-вом активных задач для каждой из них
-  @Input('categoryMap')
-  set setCategoryMap(categoryMap: Map<Category, number>) {
-    this.categoryMap = categoryMap;
-  }
+  isMobile: boolean;
 
 
   // для отображения иконки редактирования при наведении на категорию
   indexMouseMove: number;
   searchCategoryTitle: string; // текущее значение для поиска категорий
-
-
-  isMobile: boolean;
   isTablet: boolean;
-
-
 
   constructor(
     private dataHandler: DataHandlerService,
@@ -70,6 +62,12 @@ export class CategoriesComponent implements OnInit {
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
 
+  }
+
+  // категории с кол-вом активных задач для каждой из них
+  @Input('categoryMap')
+  set setCategoryMap(categoryMap: Map<Category, number>) {
+    this.categoryMap = categoryMap;
   }
 
   // метод вызывается автоматически после инициализации компонента
@@ -144,7 +142,6 @@ export class CategoriesComponent implements OnInit {
     if (this.searchCategoryTitle == null) {
       return;
     }
-
     this.searchCategory.emit(this.searchCategoryTitle);
 
   }
