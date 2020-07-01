@@ -24,6 +24,7 @@
     "bootstrap-css-only": "^4.4.1",
     "ng-sidebar": "^9.4.2",
     "ngx-color-picker": "^9.1.0",
+    "ngx-device-detector": "^1.4.5",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
