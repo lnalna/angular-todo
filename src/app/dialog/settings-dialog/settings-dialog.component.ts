@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {DataHandlerService} from '../../service/data-handler.service';
 import {Priority} from '../../model/Priority';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DataHandlerService} from '../../service/data-handler.service';
 
 @Component({
-  selector: 'app-settings-dialog',
-  templateUrl: './settings-dialog.component.html',
-  styleUrls: ['./settings-dialog.component.css']
+    selector: 'app-settings-dialog',
+    templateUrl: './settings-dialog.component.html',
+    styleUrls: ['./settings-dialog.component.css']
 })
 
 // диалоговое окно настроек приложения
@@ -15,41 +15,42 @@ import {DataHandlerService} from '../../service/data-handler.service';
 
 export class SettingsDialogComponent implements OnInit {
 
-  priorities: Priority[];
+    priorities: Priority[];
 
-  constructor(
-    private dialogRef: MatDialogRef<SettingsDialogComponent>, // для возможности работы с текущим диалог. окном
-    private dataHandler: DataHandlerService // ссылка на сервис для работы с данными
-  ) {
-  }
+    constructor(
+        private dialogRef: MatDialogRef<SettingsDialogComponent>, // для возможности работы с текущим диалог. окном
+        private dataHandler: DataHandlerService // ссылка на сервис для работы с данными
+    ) {
+    }
 
-  ngOnInit() {
-    // получаем все значения, чтобы отобразить настроку цветов
-    this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
-  }
+    ngOnInit() {
+        // получаем все значения, чтобы отобразить настроку цветов
+        this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
+    }
 
-  // нажали Закрыть
-  onClose() {
+    // нажали Закрыть
+    onClose() {
 
-    this.dialogRef.close(false);
+        this.dialogRef.close(false);
 
-  }
+    }
 
-// т.к. мы меняем значения в массивах, то изменения сразу отражаются на списке задач (не требуется доп. обновления)
 
-  // добавили приоритет
-  onAddPriority(priority: Priority): void {
-    this.dataHandler.addPriority(priority).subscribe();
-  }
+    // т.к. мы меняем значения в массивах, то изменения сразу отражаются на списке задач (не требуется доп. обновления)
 
-  // удалили приоритет
-  onDeletePriority(priority: Priority): void {
-    this.dataHandler.deletePriority(priority.id).subscribe();
-  }
+    // добавили приоритет
+    onAddPriority(priority: Priority): void {
+        this.dataHandler.addPriority(priority).subscribe();
+    }
 
-  // обновили приоритет
-  onUpdatePriority(priority: Priority): void {
-    this.dataHandler.updatePriority(priority).subscribe();
-  }
+    // удалили приоритет
+    onDeletePriority(priority: Priority): void {
+        this.dataHandler.deletePriority(priority.id).subscribe();
+    }
+
+    // обновили приоритет
+    onUpdatePriority(priority: Priority): void {
+        this.dataHandler.updatePriority(priority).subscribe();
+    }
 
 }

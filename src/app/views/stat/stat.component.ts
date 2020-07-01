@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-stat',
-  templateUrl: './stat.component.html',
-  styleUrls: ['./stat.component.css']
+    selector: 'app-stat',
+    templateUrl: './stat.component.html',
+    styleUrls: ['./stat.component.css']
 })
 
 // "presentational component": отображает полученные данные и отправляет какие-либо действия обработчику
@@ -11,27 +11,29 @@ import {Component, Input, OnInit} from '@angular/core';
 export class StatComponent implements OnInit {
 
 
-  // ----------------------- входящие параметры ----------------------------
+    // ----------------------- входящие параметры ----------------------------
 
-  @Input()
-  totalTasksInCategory: number; // общее кол-во задач в категории
+    @Input()
+    totalTasksInCategory: number; // общее кол-во задач в категории
 
-  @Input()
-  completeTasksInCategory: number; // кол-во решенных задач в категории
+    @Input()
+    completeTasksInCategory: number; // кол-во решенных задач в категории
 
-  @Input()
-  uncompleteTasksInCategory: number; // кол-во нерешенных задач в категории
+    @Input()
+    uncompleteTasksInCategory: number; // кол-во нерешенных задач в категории
 
-
-  @Input()
-  showStat: boolean; //показать или скрыть статистику
-
-  // -------------------------------------------------------------------------
+    @Input()
+    showStat: boolean; // показать или скрыть статистику
 
 
-  constructor() {}
+    // -------------------------------------------------------------------------
 
-  ngOnInit() {}
+
+    constructor() {
+    }
+
+    ngOnInit() {
+    }
 
 
 }
