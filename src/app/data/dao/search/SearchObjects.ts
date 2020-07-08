@@ -1,7 +1,12 @@
 
 // все возможные параметры поиска категорий
 export class CategorySearchValues {
-    text: string = null;
+    title: string = null;
+}
+
+// все возможные параметры поиска приоритетов
+export class PrioritySearchValues {
+  title: string = null;
 }
 
 // все возможные параметры поиска категорий
