@@ -23,18 +23,18 @@
          data-step="1"
     >
 
-<!--      <app-categories-->
-<!--        (addCategory)="onAddCategory($event)"-->
-<!--        (deleteCategory)="onDeleteCategory($event)"-->
-<!--        (searchCategory)="onSearchCategory($event)"-->
-<!--        (selectCategory)="onSelectCategory($event)"-->
-<!--        (updateCategory)="onUpdateCategory($event)"-->
-<!--        [categoryMap]="categoryMap"-->
-<!--        [selectedCategory]="selectedCategory"-->
+      <app-categories
+        (addCategory)="addCategory($event)"
+        (deleteCategory)="deleteCategory($event)"
+        (searchCategory)="searchCategory($event)"
+        (selectCategory)="selectCategory($event)"
+        (updateCategory)="updateCategory($event)"
 
+        [categories]="categories"
+        [selectedCategory]="selectedCategory"
+        [uncompletedCountForCategoryAll]="uncompletedCountForCategoryAll"
 
-<!--        [uncompletedTotal]="uncompletedTotalTasksCount"-->
-<!--      ></app-categories>-->
+      ></app-categories>
 
     </div>
 

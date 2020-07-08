@@ -6,6 +6,7 @@ import {IntroService} from './service/intro.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {concatMap, map} from 'rxjs/operators';
 import {zip} from 'rxjs';
+import {CategoryService} from "./data/dao/impl/CategoryService";
 
 
 @Component({
@@ -17,33 +18,16 @@ import {zip} from 'rxjs';
 // компонент-контейнер (Smart, Container), который управляет другими  компонентами (Dumb, Presentational)
 export class AppComponent implements OnInit {
 
-  // коллекция категорий с кол-вом незавершенных задач для каждой из них
-  categoryMap = new Map<Category, number>();
-
-  tasks: Task[];
   categories: Category[]; // все категории
-  priorities: Priority[]; // все приоритеты
 
   // статистика
-  totalTasksCountInCategory: number;
-  completedCountInCategory: number;
-  uncompletedCountInCategory: number;
-  uncompletedTotalTasksCount: number;
+  uncompletedCountForCategoryAll: number;
 
   // показать/скрыть статистику
   showStat = true;
 
   // выбранная категория
   selectedCategory: Category = null; // null - значит будет выбрана категория "Все"
-
-  // поиск
-  searchTaskText = ''; // текущее значение для поиска задач
-  searchCategoryText = ''; // текущее значение для поиска категорий
-
-
-  // фильтрация
-  priorityFilter: Priority;
-  statusFilter: boolean;
 
   // параметры бокового меню с категориями
   menuOpened: boolean; // открыть-закрыть
@@ -57,6 +41,7 @@ export class AppComponent implements OnInit {
 
 
   constructor(
+    private categoryService: CategoryService,
     private introService: IntroService, // вводная справоч. информация с выделением областей
     private deviceService: DeviceDetectorService // для определения типа устройства (моб., десктоп, планшет)
   ) {
@@ -76,10 +61,10 @@ export class AppComponent implements OnInit {
     // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
 
     // заполнить меню с категориями
-    this.fillCategories();
+    this.fillAllCategories();
 
     // по-умолчанию показать все задачи (будет выбрана категория Все)
-    this.onSelectCategory(null);
+    this.selectCategory(null);
 
     // для мобильных и планшетов - не показывать интро
     if (!this.isMobile && !this.isTablet) {
@@ -91,7 +76,7 @@ export class AppComponent implements OnInit {
 
 
   // добавление категории
-  onAddCategory(title: string): void {
+  addCategory(title: string): void {
     // this.dataHandler.addCategory(title).subscribe(categories => {
     //     this.onSearchCategory(this.searchCategoryText);
     //     this.fillCategories();
@@ -101,13 +86,16 @@ export class AppComponent implements OnInit {
 
 
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
-  fillCategories() {
+  fillAllCategories() {
+    this.categoryService.findAll().subscribe(result => {
+      this.categories = result;
+    });
 
-    if (this.categoryMap) {
-      this.categoryMap.clear();
-    }
+    // if (this.categoryMap) {
+    //   this.categoryMap.clear();
+    // }
 
-    this.categories = this.categories.sort((a, b) => a.title.localeCompare(b.title));
+    // this.categories = this.categories.sort((a, b) => a.title.localeCompare(b.title));
 
     // для каждой категории посчитать кол-во невыполненных задач
 
@@ -118,9 +106,9 @@ export class AppComponent implements OnInit {
   }
 
   // поиск категории
-  onSearchCategory(title: string): void {
+  searchCategory(title: string): void {
 
-    this.searchCategoryText = title;
+    // this.searchCategoryText = title;
 
     // this.dataHandler.searchCategories(title).subscribe(categories => {
     //   this.categories = categories;
@@ -130,7 +118,7 @@ export class AppComponent implements OnInit {
 
 
   // изменение категории
-  onSelectCategory(category: Category): void {
+  selectCategory(category: Category): void {
 
     this.selectedCategory = category;
 
@@ -144,7 +132,7 @@ export class AppComponent implements OnInit {
 
 
   // удаление категории
-  onDeleteCategory(category: Category) {
+  deleteCategory(category: Category) {
     // this.dataHandler.deleteCategory(category.id).subscribe(cat => {
     //   this.selectedCategory = null; // открываем категорию "Все"
     //   this.categoryMap.delete(cat); // не забыть удалить категорию из карты
@@ -154,7 +142,7 @@ export class AppComponent implements OnInit {
   }
 
   // обновлении категории
-  onUpdateCategory(category: Category): void {
+  updateCategory(category: Category): void {
     // this.dataHandler.updateCategory(category).subscribe(() => {
     //   this.onSearchCategory(this.searchCategoryText);
     // });
@@ -202,20 +190,20 @@ export class AppComponent implements OnInit {
 
   // поиск задач
   onSearchTasks(searchString: string): void {
-    this.searchTaskText = searchString;
-    this.updateTasks();
+    // this.searchTaskText = searchString;
+    // this.updateTasks();
   }
 
   // фильтрация задач по статусу (все, решенные, нерешенные)
   onFilterTasksByStatus(status: boolean): void {
-    this.statusFilter = status;
-    this.updateTasks();
+    // this.statusFilter = status;
+    // this.updateTasks();
   }
 
   // фильтрация задач по приоритету
   onFilterTasksByPriority(priority: Priority): void {
-    this.priorityFilter = priority;
-    this.updateTasks();
+    // this.priorityFilter = priority;
+    // this.updateTasks();
   }
 
   // обновить список задач
