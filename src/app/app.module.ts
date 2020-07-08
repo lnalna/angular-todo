@@ -34,6 +34,7 @@ import {ColorPickerModule} from 'ngx-color-picker';
 import {SidebarModule} from 'ng-sidebar';
 import localeRu from '@angular/common/locales/ru';
 import {DeviceDetectorModule} from 'ngx-device-detector';
+import {HttpClientModule} from '@angular/common/http';
 
 registerLocaleData(localeRu);
 
@@ -54,7 +55,6 @@ registerLocaleData(localeRu);
     PrioritiesComponent,
     SettingsDialogComponent,
     EditPriorityDialogComponent
-
   ],
   imports: [
     BrowserModule,
@@ -75,7 +75,8 @@ registerLocaleData(localeRu);
     MatCheckboxModule,
     ColorPickerModule,
     SidebarModule,
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    HttpClientModule
   ],
   providers: [],
   entryComponents: [
