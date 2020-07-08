@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Category} from '../../model/Category';
-import {DataHandlerService} from '../../service/data-handler.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
@@ -54,7 +53,6 @@ export class CategoriesComponent implements OnInit {
   isTablet: boolean;
 
   constructor(
-    private dataHandler: DataHandlerService,
     private dialog: MatDialog, // внедряем MatDialog, чтобы работать с диалоговыми окнами
     private deviceService: DeviceDetectorService // для определения типа устройства
 

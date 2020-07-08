@@ -5,7 +5,6 @@ import {Priority} from '../../model/Priority';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Task} from '../../model/Task';
-import {DataHandlerService} from '../../service/data-handler.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {EditTaskDialogComponent} from '../../dialog/edit-task-dialog/edit-task-dialog.component';
@@ -66,7 +65,6 @@ export class TasksComponent implements OnInit {
   priorities: Priority[]; // список приоритетов (для фильтрации задач)
 
   constructor(
-    private dataHandler: DataHandlerService, // доступ к данным
     private dialog: MatDialog, // работа с диалоговыми окнами (показать, закрыть)
     private deviceService: DeviceDetectorService // для определения типа устройства
   ) {
