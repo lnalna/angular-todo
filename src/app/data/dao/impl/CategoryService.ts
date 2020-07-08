@@ -1,5 +1,5 @@
 // класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON.
-// напоминает паттерн Фасад (Facade) - выдает только то, что нужно для функционала UI
+// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала UI
 
 // JSON формируется автоматически для параметров и результатов
 
@@ -32,11 +32,11 @@ export class CategoryService implements CategoryDAO {
     return this.httpClient.delete<Category>(this.url + '/delete/' + id);
   }
 
-  get(id: number): Observable<Category> {
+  findById(id: number): Observable<Category> {
     return this.httpClient.get<Category>(this.url + '/id/' + id);
   }
 
-  getAll(): Observable<Category[]> {
+  findAll(): Observable<Category[]> {
     return this.httpClient.get<Category[]>(this.url + '/all');
   }
 
