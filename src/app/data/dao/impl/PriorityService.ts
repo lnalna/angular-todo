@@ -1,46 +1,35 @@
-// класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON.
-// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала UI
-
-// JSON формируется автоматически для параметров и результатов
-
-import {Injectable} from '@angular/core';
+// глобальная переменная для хранения URL
+import {Inject, Injectable, InjectionToken} from '@angular/core';
+import {CommonService} from './CommonService';
+import {Priority} from '../../../model/Priority';
 import {PriorityDAO} from '../interface/PriorityDAO';
 import {HttpClient} from '@angular/common/http';
-import {PrioritySearchValues} from '../search/SearchObjects';
-import {Priority} from '../../../model/Priority';
-import {Observable} from 'rxjs';
+import {CategorySearchValues} from '../search/SearchObjects';
+import {Category} from '../../../model/Category';
+
+export const PRIORITY_URL_TOKEN = new InjectionToken<string>('url');
+
+// класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON
+// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала
+
+// JSON формируется автоматически для параметров и результатов
 
 @Injectable({
   providedIn: 'root'
 })
-export class PriorityService implements PriorityDAO {
 
-  url = 'http://localhost:8080/priority';
+// благодаря DAO и единому интерфейсу - мы можем вынести общую реализация в класс выше и избежать дублирования кода
+// классу остается только реализовать свои специфичные методы доступа к данным
+export class PriorityService extends CommonService<Priority> implements PriorityDAO {
 
-  constructor(private httpClient: HttpClient // для выполнения HTTP запросов
-  ) {}
-
-  findPriorities(prioritySearchValues: PrioritySearchValues) {
-    return this.httpClient.post<Priority[]>(this.url + '/search', prioritySearchValues);
+  constructor(@Inject(PRIORITY_URL_TOKEN) private baseUrl,
+              private http: HttpClient // для выполнения HTTP запросов
+  ) {
+    super(baseUrl, http);
   }
 
-  add(t: Priority): Observable<Priority> {
-    return this.httpClient.post<Priority>(this.url + '/add', t);
+  findPriorities(categorySearchValues: CategorySearchValues) {
+    return this.http.post<Category[]>(this.baseUrl + '/search', categorySearchValues);
   }
 
-  delete(id: number): Observable<Priority> {
-    return this.httpClient.delete<Priority>(this.url + '/delete/' + id);
-  }
-
-  findById(id: number): Observable<Priority> {
-    return this.httpClient.get<Priority>(this.url + '/id/' + id);
-  }
-
-  findAll(): Observable<Priority[]> {
-    return this.httpClient.get<Priority[]>(this.url + '/all');
-  }
-
-  update(t: Priority): Observable<Priority> {
-    return this.httpClient.put<Priority>(this.url + '/update', t);
-  }
 }

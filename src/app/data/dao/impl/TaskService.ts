@@ -1,46 +1,39 @@
-// класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON.
-// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала UI
-
-// JSON формируется автоматически для параметров и результатов
-
-import {Injectable} from '@angular/core';
+// глобальная переменная для хранения URL
+import {Inject, Injectable, InjectionToken} from '@angular/core';
+import {CommonService} from './CommonService';
+import { Task } from 'src/app/model/Task';
 import {TaskDAO} from '../interface/TaskDAO';
 import {HttpClient} from '@angular/common/http';
 import {TaskSearchValues} from '../search/SearchObjects';
 import {Observable} from 'rxjs';
-import { Task } from 'src/app/model/Task';
+
+export const TASK_URL_TOKEN = new InjectionToken<string>('url');
+
+// класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON
+// напоминает паттер Фасад (Facade) - выдает только то, что нужно для функционала
+
+// JSON формируется автоматически для параметров и результатов
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskService implements TaskDAO {
 
-  url = 'http://localhost:8080/task';
+// благодаря DAO и единому интерфейсу - мы можем вынести общую реализация в класс выше и избежать дублирования кода
+// классу остается только реализовать свои специфичные методы доступа к данным
+export class TaskService extends CommonService<Task> implements TaskDAO {
 
-  constructor(private httpClient: HttpClient // для выполнения HTTP запросов
-  ) {}
 
-  findTasks(taskSearchValues: TaskSearchValues) {
-    return this.httpClient.post<Task[]>(this.url + '/search', taskSearchValues);
+  constructor(@Inject(TASK_URL_TOKEN) private baseUrl,
+              private http: HttpClient // для выполнения HTTP запросов
+  ) {
+    super(baseUrl, http);
   }
 
-  add(t: Task): Observable<Task> {
-    return this.httpClient.post<Task>(this.url + '/add', t);
+
+  // поиск задач по любым параметрам
+  findTasks(searchObj: TaskSearchValues): Observable<any> { // из backend получаем тип Page, поэтому указываем any
+    return this.http.post<any>(this.baseUrl + '/search', searchObj);
   }
 
-  delete(id: number): Observable<Task> {
-    return this.httpClient.delete<Task>(this.url + '/delete/' + id);
-  }
 
-  findById(id: number): Observable<Task> {
-    return this.httpClient.get<Task>(this.url + '/id/' + id);
-  }
-
-  findAll(): Observable<Task[]> {
-    return this.httpClient.get<Task[]>(this.url + '/all');
-  }
-
-  update(t: Task): Observable<Task> {
-    return this.httpClient.put<Task>(this.url + '/update', t);
-  }
 }
