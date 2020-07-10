@@ -2,7 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Category} from '../../model/Category';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
-import {CategorySearchValues} from "../../data/dao/search/SearchObjects";
+import {CategorySearchValues} from '../../data/dao/search/SearchObjects';
+import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
+import {DialogAction} from "../../object/DialogResult";
 
 @Component({
   selector: 'app-categories',
@@ -108,16 +110,6 @@ export class CategoriesComponent implements OnInit {
   }
 
 
-  // диалоговое окно для добавления категории
-  openAddDialog() {
-
-  }
-
-
-  // диалоговое окно для редактирования категории
-  openEditDialog(category: Category) {
-
-  }
 
 
   // поиск категории
@@ -165,5 +157,53 @@ export class CategoriesComponent implements OnInit {
 
     return this.filterChanged;
 
+  }
+
+  // диалоговое окно для добавления категории
+  openAddDialog() {
+
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      // передаем новый пустой объект для заполнения
+      data: [new Category(null, ''), 'Добавление категории'],
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
+
+      if (result.action === DialogAction.SAVE) {
+        this.addCategory.emit(result.obj as Category); // вызываем внешний обработчик
+      }
+    });
+  }
+
+
+  // диалоговое окно для редактирования категории
+  openEditDialog(category: Category) {
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      // передаем копию объекта, чтобы все изменения не касались оригинала (чтобы их можно было отменить)
+      data: [new Category(category.id, category.title), 'Редактирование категории'], width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
+
+      if (result.action === DialogAction.DELETE) { // нажали удалить
+        this.deleteCategory.emit(category); // вызываем внешний обработчик
+        return;
+      }
+
+      if (result.action === DialogAction.SAVE) { // нажали сохранить (обрабатывает как добавление, так и удаление)
+
+        this.updateCategory.emit(result.obj as Category); // вызываем внешний обработчик
+        return;
+      }
+    });
   }
 }

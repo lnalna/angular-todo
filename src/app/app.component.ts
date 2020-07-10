@@ -78,27 +78,6 @@ export class AppComponent implements OnInit {
   }
 
 
-  // добавление категории
-  addCategory(category: Category) {
-    this.categoryService.add(category).subscribe(result => {
-
-      }
-    );
-  }
-
-  // удаление категории
-  deleteCategory(category: Category) {
-    this.categoryService.delete(category.id).subscribe(cat => {
-
-    });
-  }
-
-  // обновлении категории
-  updateCategory(category: Category) {
-    this.categoryService.update(category).subscribe(() => {
-
-    });
-  }
 
 
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
@@ -154,6 +133,32 @@ export class AppComponent implements OnInit {
   toggleMenu() {
     this.menuOpened = !this.menuOpened;
   }
+
+
+
+  // добавление категории
+  addCategory(category: Category) {
+    this.categoryService.add(category).subscribe(result => {
+        // если вызов сервиса завершился успешно - добавляем новую категорию в локальный массив
+        this.searchCategory(this.categorySearchValues); // обновляем список категорий
+      }
+    );
+  }
+
+  // удаление категории
+  deleteCategory(category: Category) {
+    this.categoryService.delete(category.id).subscribe(cat => {
+      this.searchCategory(this.categorySearchValues); // обновляем список категорий
+    });
+  }
+
+  // обновлении категории
+  updateCategory(category: Category) {
+    this.categoryService.update(category).subscribe(() => {
+      this.searchCategory(this.categorySearchValues); // обновляем список категорий
+    });
+  }
+
 
 
 }

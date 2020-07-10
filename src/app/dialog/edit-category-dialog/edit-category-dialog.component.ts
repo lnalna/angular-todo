@@ -3,6 +3,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {OperType} from '../OperType';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DialogAction, DialogResult} from '../../object/DialogResult';
+import {Category} from '../../model/Category';
 
 @Component({
     selector: 'app-edit-category-dialog',
@@ -13,59 +15,63 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 // создание/редактирование категории
 export class EditCategoryDialogComponent implements OnInit {
 
-    dialogTitle: string; // текст для диалогового окна
-    categoryTitle: string; // текст для названия категории (при реактировании или добавлении)
-    operType: OperType; // тип операции
+  constructor(
+    private dialogRef: MatDialogRef<EditCategoryDialogComponent>, // для работы с текущим диалог. окном
+    @Inject(MAT_DIALOG_DATA) private data: [Category, string], // данные, которые передали в диалоговое окно
+    private dialog: MatDialog // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
+  ) {
+  }
 
-    constructor(
-        private dialogRef: MatDialogRef<EditCategoryDialogComponent>, // для работы с текущим диалог. окном
-        @Inject(MAT_DIALOG_DATA) private data: [string, string, OperType], // данные, которые передали в диалоговое окно
-        private dialog: MatDialog // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
-    ) {
+  dialogTitle: string; // текст для диалогового окна
+  category: Category; // переданный объект для редактирования
+  canDelete = false; // можно ли удалять объект (активна ли кнопка удаления)
+
+  ngOnInit() {
+
+    // получаем переданные в диалоговое окно данные
+    this.category = this.data[0];
+    this.dialogTitle = this.data[1];
+
+    // если было передано значение, значит это редактирование, поэтому делаем удаление возможным (иначе скрываем иконку)
+    if (this.category && this.category.id && this.category.id > 0) {
+      this.canDelete = true;
     }
+  }
 
-    ngOnInit() {
+  // нажали ОК
+  confirm(): void {
+    this.dialogRef.close(new DialogResult(DialogAction.SAVE, this.category));
+  }
 
-        // получаем переданные в диалоговое окно данные
-        this.categoryTitle = this.data[0];
-        this.dialogTitle = this.data[1];
-        this.operType = this.data[2]; // тип операции
+  // нажали отмену
+  cancel(): void {
+    this.dialogRef.close(new DialogResult(DialogAction.CANCEL));
+  }
 
-    }
+  // нажали Удалить
+  delete(): void {
 
-    // нажали ОК
-    onConfirm(): void {
-        this.dialogRef.close(this.categoryTitle);
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '500px',
+      data: {
+        dialogTitle: 'Подтвердите действие',
+        message: `Вы действительно хотите удалить категорию: "${this.category.title}"? (сами задачи не удаляются)`
+      },
+      autoFocus: false
+    });
 
-    // нажали отмену (ничего не сохраняем и закрываем окно)
-    onCancel(): void {
-        this.dialogRef.close(false);
-    }
+    dialogRef.afterClosed().subscribe(result => {
 
-    // нажали Удалить
-    delete(): void {
-
-        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            maxWidth: '500px',
-            data: {
-                dialogTitle: 'Подтвердите действие',
-                message: `Вы действительно хотите удалить категорию: "${this.categoryTitle}"? (сами задачи не удаляются)`
-            },
-            autoFocus: false
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.dialogRef.close('delete'); // нажали удалить
-            }
-        });
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
 
 
-    }
+      if (result.action === DialogAction.OK) {
+        this.dialogRef.close(new DialogResult(DialogAction.DELETE)); // нажали удалить
+      }
+    });
 
-    // можно ли удалять (для показа/скрытия кнопки)
-    canDelete(): boolean {
-        return this.operType === OperType.EDIT;
-    }
+
+  }
 }

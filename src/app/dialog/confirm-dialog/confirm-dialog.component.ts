@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogAction, DialogResult} from '../../object/DialogResult';
 
 @Component({
     selector: 'app-confirm-dialog',
@@ -9,28 +10,28 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 // диалоговое окно подтверждения действия
 export class ConfirmDialogComponent implements OnInit {
-    dialogTitle: string;
-    message: string;
+  dialogTitle: string;
+  message: string;
 
-    constructor(
-        private dialogRef: MatDialogRef<ConfirmDialogComponent>, // для работы с текущим диалог. окном
-        @Inject(MAT_DIALOG_DATA) private data: { dialogTitle: string, message: string } // данные, которые передали в диалоговое окно
-    ) {
-        this.dialogTitle = data.dialogTitle; // заголовок
-        this.message = data.message; // сообщение
-    }
+  constructor(
+    private dialogRef: MatDialogRef<ConfirmDialogComponent>, // для работы с текущим диалог. окном
+    @Inject(MAT_DIALOG_DATA) private data: { dialogTitle: string, message: string } // данные, которые передали в диалоговое окно
+  ) {
+    this.dialogTitle = data.dialogTitle; // заголовок
+    this.message = data.message; // сообщение
+  }
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+  }
 
-    // нажали ОК
-    onConfirm(): void {
-        this.dialogRef.close(true);
-    }
+  // нажали ОК
+  confirm(): void {
+    this.dialogRef.close(new DialogResult(DialogAction.OK));
+  }
 
-    // нажали отмену
-    onCancel(): void {
-        this.dialogRef.close(false);
-    }
+  // нажали отмену
+  cancel(): void {
+    this.dialogRef.close(new DialogResult(DialogAction.CANCEL));
+  }
 }
 
