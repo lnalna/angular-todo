@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Category} from './model/Category';
-import {CategorySearchValues} from './data/dao/search/SearchObjects';
+import {CategorySearchValues, TaskSearchValues} from './data/dao/search/SearchObjects';
 import {CategoryService} from './data/dao/impl/CategoryService';
 import {IntroService} from './service/intro.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {TaskService} from './data/dao/impl/TaskService';
+import { Task } from './model/Task';
 
 
 @Component({
@@ -15,6 +17,7 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 // компонент-контейнер (Smart, Container), который управляет другими  компонентами (Dumb, Presentational)
 export class AppComponent implements OnInit {
 
+  tasks: Task[]; // текущие задачи для отображения на странице
   categories: Category[]; // все категории
 
   // статистика
@@ -38,12 +41,13 @@ export class AppComponent implements OnInit {
   isTablet: boolean;
 
   // параметры поисков
-  categorySearchValues = new CategorySearchValues(); // экземпляр можно создать тут же, т.к. не загружаем из cookies
-
+  categorySearchValues = new CategorySearchValues();
+  taskSearchValues = new TaskSearchValues();
 
 
   constructor(
     private categoryService: CategoryService,
+    private taskService: TaskService,
     private introService: IntroService, // вводная справоч. информация с выделением областей
     private deviceService: DeviceDetectorService // для определения типа устройства (моб., десктоп, планшет)
   ) {
@@ -75,34 +79,15 @@ export class AppComponent implements OnInit {
       this.introService.startIntroJS(true);
     }
 
-  }
 
-
-
-
-  // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
-  fillAllCategories() {
-
-    this.categoryService.findAll().subscribe(result => {
-      this.categories = result;
-    });
-
+    this.selectCategory(this.selectedCategory);
 
   }
 
-  // поиск категории
-  searchCategory(categorySearchValues: CategorySearchValues) {
-    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
-      this.categories = result;
-    });
-  }
 
 
-  // изменение категории
-  selectCategory(category: Category): void {
 
 
-  }
 
 
   // если закрыли меню любым способом - ставим значение false
@@ -157,6 +142,56 @@ export class AppComponent implements OnInit {
     this.categoryService.update(category).subscribe(() => {
       this.searchCategory(this.categorySearchValues); // обновляем список категорий
     });
+  }
+
+
+  // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
+  fillAllCategories() {
+
+    this.categoryService.findAll().subscribe(result => {
+      this.categories = result;
+    });
+
+
+  }
+
+  // поиск категории
+  searchCategory(categorySearchValues: CategorySearchValues) {
+    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
+      this.categories = result;
+    });
+  }
+
+
+  // выбрали/изменили категорию
+  selectCategory(category: Category) {
+
+    this.selectedCategory = category; // запоминаем выбранную категорию
+
+    // для поиска задач по данной категории
+    this.taskSearchValues.categoryId = category ? category.id : null;
+
+    // обновить список задач согласно выбранной категории и другим параметрам поиска из taskSearchValues
+    this.searchTasks(this.taskSearchValues);
+
+    if (this.isMobile) {
+      this.menuOpened = false; // для мобильных - автоматически закрываем боковое меню
+    }
+  }
+
+
+
+  // поиск задач
+  searchTasks(searchTaskValues: TaskSearchValues) {
+
+    this.taskSearchValues = searchTaskValues;
+
+    this.taskService.findTasks(this.taskSearchValues).subscribe(result => {
+      this.tasks = result.content; // массив задач
+      console.log(result);
+    });
+
+
   }
 
 

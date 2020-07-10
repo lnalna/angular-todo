@@ -4,7 +4,7 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
 import {CategorySearchValues} from '../../data/dao/search/SearchObjects';
 import {EditCategoryDialogComponent} from '../../dialog/edit-category-dialog/edit-category-dialog.component';
-import {DialogAction} from "../../object/DialogResult";
+import {DialogAction} from '../../object/DialogResult';
 
 @Component({
   selector: 'app-categories',
@@ -127,10 +127,16 @@ export class CategoriesComponent implements OnInit {
   }
 
 
-  // выбираем категорию для отображения
+  // выбираем категорию для отображения соотв. задач
   showCategory(category: Category) {
 
+    // если не изменилось значение, ничего не делать (чтобы лишний раз не делать запрос данных)
+    if (this.selectedCategory === category) {
+      return;
+    }
 
+    this.selectedCategory = category; // сохраняем выбранную категорию
+    this.selectCategory.emit(this.selectedCategory); // вызываем внешний обработчик
   }
 
 
