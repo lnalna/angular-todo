@@ -6,6 +6,9 @@ import {IntroService} from './service/intro.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {TaskService} from './data/dao/impl/TaskService';
 import { Task } from './model/Task';
+import {PageEvent} from '@angular/material/paginator';
+import {MatDialog} from '@angular/material/dialog';
+import {Observable} from 'rxjs';
 
 
 @Component({
@@ -17,154 +20,106 @@ import { Task } from './model/Task';
 // компонент-контейнер (Smart, Container), который управляет другими  компонентами (Dumb, Presentational)
 export class AppComponent implements OnInit {
 
-  tasks: Task[]; // текущие задачи для отображения на странице
-  categories: Category[]; // все категории
+  // если равно null - по-умолчанию будет выбираться категория 'Все'
+  selectedCategory: Category = null;
 
-  // статистика
-  uncompletedCountForCategoryAll: number;
-
-  // показать/скрыть статистику
-  showStat = true;
-
-  // выбранная категория
-  selectedCategory: Category = null; // null - значит будет выбрана категория "Все"
-
-
-  // параметры бокового меню с категориями
-  menuOpened: boolean; // открыть-закрыть
-  menuMode: string; // тип выдвижения (поверх, с толканием и пр.)
-  menuPosition: string; // сторона
-  showBackdrop: boolean; // показывать фоновое затемнение или нет
 
   // тип устройства
   isMobile: boolean;
   isTablet: boolean;
 
+
+  showStat: boolean;   // показать/скрыть статистику
+  showSearch: boolean;  // показать/скрыть поиск
+
+
+  tasks: Task[]; // текущие задачи для отображения на странице
+  categories: Category[]; // категории для отображения
+
+
+  // параметры бокового меню с категориями
+  menuOpened: boolean; // открыть-закрыть
+  menuMode: string; // тип выдвижения (поверх, с толканием и пр.)
+  menuPosition: string;
+  showBackdrop: boolean;
+
+  readonly defaultPageSize = 5;
+  readonly defaultPageNumber = 0;
+
+  uncompletedCountForCategoryAll: number; // для категории Все
+
+
+  totalTasksFounded: number; // сколько всего задач найдено
+
   // параметры поисков
-  categorySearchValues = new CategorySearchValues();
   taskSearchValues = new TaskSearchValues();
+  categorySearchValues = new CategorySearchValues();
 
 
   constructor(
-    private categoryService: CategoryService,
+    // сервисы для работы с данными (фасад)
     private taskService: TaskService,
+    private categoryService: CategoryService,
+    private dialog: MatDialog, // работа с диалог. окнами
     private introService: IntroService, // вводная справоч. информация с выделением областей
     private deviceService: DeviceDetectorService // для определения типа устройства (моб., десктоп, планшет)
   ) {
 
-    // определяем тип запроса
+
+
+
+
+
+
+    // определяем тип устройства
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
 
-    this.showStat = true ? !this.isMobile : false; // если моб. устройство, то по-умолчанию не показывать статистику
 
-    this.setMenuValues(); // установить настройки меню
-
+    this.setMenuDisplayParams(); // параметры отображения меню (зависит от устройства пользователя)
 
   }
 
-  ngOnInit() {
-    // this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
-    // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
 
-    // заполнить меню с категориями
-    this.fillAllCategories();
+  ngOnInit(): void {
 
-    // по-умолчанию показать все задачи (будет выбрана категория Все)
-    this.selectCategory(null);
+
 
     // для мобильных и планшетов - не показывать интро
     if (!this.isMobile && !this.isTablet) {
-      // пробуем показать приветственные справочные материалы
-      this.introService.startIntroJS(true);
+      // this.introService.startIntroJS(true); // при первом запуске приложения - показать интро
     }
 
+    // заполнить категории
+    this.fillAllCategories().subscribe(res => {
+      this.categories = res;
 
-    this.selectCategory(this.selectedCategory);
-
-  }
-
-
-
-
-
+      // первоначальное отображение задач при загрузке приложения
+      // запускаем толко после выполнения статистики (т.к. понадобятся ее данные) и загруженных категорий
+      this.selectCategory(this.selectedCategory);
 
 
-  // если закрыли меню любым способом - ставим значение false
-  onClosedMenu() {
-    this.menuOpened = false;
-  }
-
-  // параметры меню
-  setMenuValues() {
-
-    this.menuPosition = 'left'; // меню слева
-
-    // настройки бокового меню для моб. и десктоп вариантов
-    if (this.isMobile) {
-      this.menuOpened = false; // на моб. версии по-умолчанию меню будет закрыто
-      this.menuMode = 'over'; // поверх всего контента
-      this.showBackdrop = true; // показывать темный фон или нет (нужно для мобильной версии)
-    } else {
-      this.menuOpened = true; // НЕ в моб. версии  по-умолчанию меню будет открыто (т.к. хватает места)
-      this.menuMode = 'push'; // будет "толкать" основной контент, а не закрывать его
-      this.showBackdrop = false; // показывать темный фон или нет
-    }
-
-
-  }
-
-  // показать-скрыть меню
-  toggleMenu() {
-    this.menuOpened = !this.menuOpened;
-  }
-
-
-
-  // добавление категории
-  addCategory(category: Category) {
-    this.categoryService.add(category).subscribe(result => {
-        // если вызов сервиса завершился успешно - добавляем новую категорию в локальный массив
-        this.searchCategory(this.categorySearchValues); // обновляем список категорий
-      }
-    );
-  }
-
-  // удаление категории
-  deleteCategory(category: Category) {
-    this.categoryService.delete(category.id).subscribe(cat => {
-      this.searchCategory(this.categorySearchValues); // обновляем список категорий
-    });
-  }
-
-  // обновлении категории
-  updateCategory(category: Category) {
-    this.categoryService.update(category).subscribe(() => {
-      this.searchCategory(this.categorySearchValues); // обновляем список категорий
-    });
-  }
-
-
-  // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
-  fillAllCategories() {
-
-    this.categoryService.findAll().subscribe(result => {
-      this.categories = result;
     });
 
 
   }
 
-  // поиск категории
-  searchCategory(categorySearchValues: CategorySearchValues) {
-    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
-      this.categories = result;
-    });
+
+
+  // заполняет массив категорий
+  fillAllCategories(): Observable<Category[]> {
+    return this.categoryService.findAll();
   }
+
+
 
 
   // выбрали/изменили категорию
   selectCategory(category: Category) {
+
+
+    // сбрасываем, чтобы показывать результат с первой страницы
+    this.taskSearchValues.pageNumber = 0;
 
     this.selectedCategory = category; // запоминаем выбранную категорию
 
@@ -179,19 +134,128 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // добавление категории
+  addCategory(category: Category) {
+    this.categoryService.add(category).subscribe(result => {
+        // если вызов сервиса завершился успешно - добавляем новую категорию в локальный массив
 
+        this.searchCategory(this.categorySearchValues);
+      }
+    );
+  }
+
+  // удаление категории
+  deleteCategory(category: Category) {
+    this.categoryService.delete(category.id).subscribe(cat => {
+      this.selectedCategory = null; // выбираем категорию "Все"
+
+      this.searchCategory(this.categorySearchValues);
+      this.selectCategory(this.selectedCategory);
+
+    });
+  }
+
+  // обновлении категории
+  updateCategory(category: Category) {
+    this.categoryService.update(category).subscribe(() => {
+
+      this.searchCategory(this.categorySearchValues); // обновляем список категорий
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+
+    });
+  }
+
+  // поиск категории
+  searchCategory(categorySearchValues: CategorySearchValues) {
+
+    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
+      this.categories = result;
+    });
+
+  }
 
   // поиск задач
   searchTasks(searchTaskValues: TaskSearchValues) {
-
     this.taskSearchValues = searchTaskValues;
 
     this.taskService.findTasks(this.taskSearchValues).subscribe(result => {
+      this.totalTasksFounded = result.totalElements; // сколько данных показывать на странице
       this.tasks = result.content; // массив задач
-      console.log(result);
     });
 
 
+  }
+
+
+
+  // добавление задачи
+  addTask(task: Task) {
+
+
+
+  }
+
+
+  // удаление задачи
+  deleteTask(task: Task) {
+
+
+
+  }
+
+
+  // обновление задачи
+  updateTask(task: Task) {
+
+
+
+  }
+
+  // показать-скрыть меню
+  toggleMenu() {
+    this.menuOpened = !this.menuOpened;
+  }
+
+
+  // если закрыли меню любым способом - ставим значение false
+  onClosedMenu() {
+    this.menuOpened = false;
+  }
+
+  // параметры отображения меню (зависит от устройства пользователя)
+  setMenuDisplayParams() {
+    this.menuPosition = 'left'; // меню слева
+
+    // настройки бокового меню для моб. и десктоп вариантов
+    if (this.isMobile) {
+      this.menuOpened = false; // на моб. версии по-умолчанию меню будет закрыто
+      this.menuMode = 'over'; // поверх всего контента
+      this.showBackdrop = true; // если нажали на область вне меню - закрыть его
+    } else {
+      this.menuOpened = true; // НЕ в моб. версии по-умолчанию меню будет открыто (т.к. хватает места)
+      this.menuMode = 'push'; // будет "толкать" основной контент, а не закрывать его
+      this.showBackdrop = false;
+    }
+
+  }
+
+
+  // изменили кол-во элементов на странице или перешли на другую страницу
+  // с помощью paginator
+  paging(pageEvent: PageEvent) {
+
+    // если изменили настройку "кол-во на странице" - заново делаем запрос и показываем с 1й страницы
+    if (this.taskSearchValues.pageSize !== pageEvent.pageSize) {
+      this.taskSearchValues.pageNumber = 0; // новые данные будем показывать с 1-й страницы (индекс 0)
+    } else {
+      // если просто перешли на другую страницу
+      this.taskSearchValues.pageNumber = pageEvent.pageIndex;
+    }
+
+    this.taskSearchValues.pageSize = pageEvent.pageSize;
+    this.taskSearchValues.pageNumber = pageEvent.pageIndex;
+
+    this.searchTasks(this.taskSearchValues); // показываем новые данные
   }
 
 
