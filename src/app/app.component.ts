@@ -199,12 +199,20 @@ export class AppComponent implements OnInit {
       this.tasks = result.content; // массив задач
     });
 
-
   }
 
 
   // добавление задачи
   addTask(task: Task) {
+
+    // более правильно - реализовать код ниже с помощью цепочки rxjs (чтобы выполнялось последовательно и с условиями),
+    // но решил сильно не усложнять
+
+    this.taskService.add(task).subscribe(result => {
+
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+
+    });
 
 
   }
@@ -213,12 +221,30 @@ export class AppComponent implements OnInit {
   // удаление задачи
   deleteTask(task: Task) {
 
+    // более правильно - реализовать код ниже с помощью цепочки rxjs (чтобы выполнялось последовательно и с условиями),
+    // но решил сильно не усложнять
+
+    this.taskService.delete(task.id).subscribe(result => {
+
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+
+    });
+
 
   }
 
 
   // обновление задачи
   updateTask(task: Task) {
+
+    // более правильно - реализовать код ниже с помощью цепочки rxjs (чтобы выполнялось последовательно и с условиями),
+    // но решил сильно не усложнять
+
+    this.taskService.update(task).subscribe(result => {
+
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+
+    });
 
 
   }
@@ -277,7 +303,6 @@ export class AppComponent implements OnInit {
     this.showSearch = showSearch;
 
   }
-
 
 
 }
