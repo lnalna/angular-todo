@@ -1,12 +1,12 @@
 
-// глобальная переменная для хранения URL
 import {Inject, Injectable, InjectionToken} from '@angular/core';
-import {CommonService} from './CommonService';
-import {Category} from '../../../model/Category';
-import {CategoryDAO} from '../interface/CategoryDAO';
 import {HttpClient} from '@angular/common/http';
-import {CategorySearchValues} from '../search/SearchObjects';
+import {CommonService} from './CommonService';
+import {Category} from "../../../model/Category";
+import {CategoryDAO} from "../interface/CategoryDAO";
+import {CategorySearchValues} from "../search/SearchObjects";
 
+// глобальная переменная для хранения URL
 export const CATEGORY_URL_TOKEN = new InjectionToken<string>('url');
 
 // класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON

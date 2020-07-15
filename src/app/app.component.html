@@ -1,135 +1,135 @@
-<div class="spinner" *ngIf="spinner && spinner.visibility | async"></div>
 
 <ng-sidebar-container> <!--контейнер для внедрения слайд-меню-->
 
-  <!--  слайд-меню-->
-  <ng-sidebar
+    <!--  слайд-меню-->
+    <ng-sidebar
 
 
-    [opened]="menuOpened"
-    [closeOnClickOutside]="false"
-    [closeOnClickBackdrop]="true"
-    [showBackdrop]="showBackdrop"
-    [mode]="menuMode"
-    [animate]="true"
-    [position]="menuPosition"
-    [autoFocus]="false"
+            [opened]="menuOpened"
+            [closeOnClickOutside]="false"
+            [closeOnClickBackdrop]="true"
+            [showBackdrop]="showBackdrop"
+            [mode]="menuMode"
+            [animate]="true"
+            [position]="menuPosition"
+            [autoFocus]="false"
 
 
-    (onClosed)="onClosedMenu()"
+            (onClosed)="onClosedMenu()"
 
 
-  >
-
-
-    <div class="sidebar"
-         data-color="purple"
-         data-step="1"
-         data-intro="Фильтрация задач, добавление/удаление/редактирование категорий"
-         data-position='right'
     >
 
-      <!--    список категорий-->
-      <app-categories
 
-        (selectCategory)="selectCategory($event)"
-        (addCategory)="addCategory($event)"
-        (deleteCategory)="deleteCategory($event)"
-        (updateCategory)="updateCategory($event)"
-        (searchCategory)="searchCategory($event)"
-
-
-        [selectedCategory]="selectedCategory"
-        [categories]="categories"
-        [uncompletedCountForCategoryAll]="uncompletedCountForCategoryAll"
-        [categorySearchValues]="categorySearchValues"
-
-      ></app-categories>
-
-    </div>
-
-  </ng-sidebar>
-
-
-  <!--  основной контент-->
-  <!--  ng-sidebar-content - над чем будет открываться слайд-меню-->
-  <div ng-sidebar-content>
-    <div class="main-panel wrapper">
-
-
-      <!--    навигация с шапкой и списком категорий-->
-
-      <nav class="navbar navbar-transparent navbar-absolute fixed-top navbar-expand">
-
-        <!--     шапка с меню -->
-        <app-header
-          [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
-          [showStat]="showStat"
-
-          (toggleStat)="toggleStat($event)"
-          (toggleMenu)="toggleMenu()"
-
+        <div class="sidebar"
+             data-color="purple"
+             data-step="1"
+             data-intro="Фильтрация задач, добавление/удаление/редактирование категорий"
+             data-position='right'
         >
 
-        </app-header>
+            <!--    список категорий-->
+            <app-categories
+
+                    (selectCategory)="selectCategory($event)"
+                    (addCategory)="addCategory($event)"
+                    (deleteCategory)="deleteCategory($event)"
+                    (updateCategory)="updateCategory($event)"
+                    (searchCategory)="searchCategory($event)"
 
 
-      </nav>
+                    [selectedCategory]="selectedCategory"
+                    [categories]="categories"
+                    [uncompletedCountForCategoryAll]="uncompletedCountForCategoryAll"
+                    [categorySearchValues]="categorySearchValues"
+
+            ></app-categories>
+
+        </div>
+
+    </ng-sidebar>
 
 
-      <div class="content">
-        <div class="container-fluid">
+    <!--  основной контент-->
+    <!--  ng-sidebar-content - над чем будет открываться слайд-меню-->
+    <div ng-sidebar-content>
+        <div class="main-panel wrapper">
 
 
-          <!-- статистика -->
-          <app-stat
+            <!--    навигация с шапкой и списком категорий-->
 
-            [dash]="dash"
-            [showStat]="showStat"
-          >
+            <nav class="navbar navbar-transparent navbar-absolute fixed-top navbar-expand">
 
-          </app-stat>
+                <!--     шапка с меню -->
+                <app-header
+                        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
+                        [showStat]="showStat"
 
+                        (toggleStat)="toggleStat($event)"
+                        (toggleMenu)="toggleMenu()"
+                        (settingsChanged)="settingsChanged($event)"
 
-          <!--        список задач-->
-          <app-tasks
+                >
 
-            [showSearch]="showSearch"
-            [totalTasksFounded]="totalTasksFounded"
-            [tasks]="tasks"
-            [priorities]="priorities"
-            [categories]="categories"
-            [selectedCategory]="selectedCategory"
-            [taskSearchValues]="taskSearchValues"
+                </app-header>
 
 
-            (searchAction)="searchTasks($event)"
-            (selectCategory)="selectCategory($event)"
-            (addTask)="addTask($event)"
-            (deleteTask)="deleteTask($event)"
-            (updateTask)="updateTask($event)"
-            (paging)="paging($event)"
-            (toggleSearch)="toggleSearch($event)"
+            </nav>
 
 
-          >
+            <div class="content">
+                <div class="container-fluid">
 
 
-          </app-tasks>
+                    <!-- статистика -->
+                    <app-stat
+
+                            [dash]="dash"
+                            [showStat]="showStat"
+                    >
+
+                    </app-stat>
+
+
+                    <!--        список задач-->
+                    <app-tasks
+
+                            [showSearch]="showSearch"
+                            [totalTasksFounded]="totalTasksFounded"
+                            [tasks]="tasks"
+                            [priorities]="priorities"
+                            [categories]="categories"
+                            [selectedCategory]="selectedCategory"
+                            [taskSearchValues]="taskSearchValues"
+
+
+                            (searchAction)="searchTasks($event)"
+                            (selectCategory)="selectCategory($event)"
+                            (addTask)="addTask($event)"
+                            (deleteTask)="deleteTask($event)"
+                            (updateTask)="updateTask($event)"
+                            (paging)="paging($event)"
+                            (toggleSearch)="toggleSearch($event)"
+
+
+                    >
+
+
+                    </app-tasks>
+
+
+                </div>
+            </div>
+
+
+            <!--    нижняя часть страницы (футер, подвал) -->
+            <app-footer *ngIf="!isMobile"></app-footer>
 
 
         </div>
-      </div>
-
-
-      <!--    нижняя часть страницы (футер, подвал) -->
-      <app-footer *ngIf="!isMobile"></app-footer>
 
 
     </div>
-
-
-  </div>
 
 
 </ng-sidebar-container>

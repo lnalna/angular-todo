@@ -1,12 +1,13 @@
-// глобальная переменная для хранения URL
+import {Observable} from 'rxjs';
 import {Inject, Injectable, InjectionToken} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+
 import {CommonService} from './CommonService';
 import { Task } from 'src/app/model/Task';
-import {TaskDAO} from '../interface/TaskDAO';
-import {HttpClient} from '@angular/common/http';
-import {TaskSearchValues} from '../search/SearchObjects';
-import {Observable} from 'rxjs';
+import {TaskDAO} from "../interface/TaskDAO";
+import {TaskSearchValues} from "../search/SearchObjects";
 
+// глобальная переменная для хранения URL
 export const TASK_URL_TOKEN = new InjectionToken<string>('url');
 
 // класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON

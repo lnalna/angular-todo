@@ -2,9 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DashboardData} from '../../object/DashboardData';
 
 @Component({
-    selector: 'app-stat',
-    templateUrl: './stat.component.html',
-    styleUrls: ['./stat.component.css']
+  selector: 'app-stat',
+  templateUrl: './stat.component.html',
+  styleUrls: ['./stat.component.css']
 })
 
 // "presentational component": отображает полученные данные и отправляет какие-либо действия обработчику
@@ -33,7 +33,7 @@ export class StatComponent implements OnInit {
 
   getTotal(): number {
     if (this.dash) {
-      return this.dash.completedTotal + this.dash.uncompletedTotal;
+      return this.dash.completedTotal + this.dash.uncompletedTotal
     }
   }
 
@@ -60,5 +60,4 @@ export class StatComponent implements OnInit {
       return this.dash.uncompletedTotal ? (this.dash.uncompletedTotal / this.getTotal()) : 0;
     }
   }
-
 }

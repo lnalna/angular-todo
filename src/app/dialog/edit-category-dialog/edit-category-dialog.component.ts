@@ -1,10 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {OperType} from '../OperType';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogAction, DialogResult} from '../../object/DialogResult';
 import {Category} from '../../model/Category';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-edit-category-dialog',
@@ -15,63 +13,63 @@ import {Category} from '../../model/Category';
 // создание/редактирование категории
 export class EditCategoryDialogComponent implements OnInit {
 
-  constructor(
-    private dialogRef: MatDialogRef<EditCategoryDialogComponent>, // для работы с текущим диалог. окном
-    @Inject(MAT_DIALOG_DATA) private data: [Category, string], // данные, которые передали в диалоговое окно
-    private dialog: MatDialog // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
-  ) {
-  }
-
-  dialogTitle: string; // текст для диалогового окна
-  category: Category; // переданный объект для редактирования
-  canDelete = false; // можно ли удалять объект (активна ли кнопка удаления)
-
-  ngOnInit() {
-
-    // получаем переданные в диалоговое окно данные
-    this.category = this.data[0];
-    this.dialogTitle = this.data[1];
-
-    // если было передано значение, значит это редактирование, поэтому делаем удаление возможным (иначе скрываем иконку)
-    if (this.category && this.category.id && this.category.id > 0) {
-      this.canDelete = true;
+    constructor(
+        private dialogRef: MatDialogRef<EditCategoryDialogComponent>, // для работы с текущим диалог. окном
+        @Inject(MAT_DIALOG_DATA) private data: [Category, string], // данные, которые передали в диалоговое окно
+        private dialog: MatDialog // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
+    ) {
     }
-  }
 
-  // нажали ОК
-  confirm(): void {
-    this.dialogRef.close(new DialogResult(DialogAction.SAVE, this.category));
-  }
+    dialogTitle: string; // текст для диалогового окна
+    category: Category; // переданный объект для редактирования
+    canDelete = false; // можно ли удалять объект (активна ли кнопка удаления)
 
-  // нажали отмену
-  cancel(): void {
-    this.dialogRef.close(new DialogResult(DialogAction.CANCEL));
-  }
+    ngOnInit() {
 
-  // нажали Удалить
-  delete(): void {
+        // получаем переданные в диалоговое окно данные
+        this.category = this.data[0];
+        this.dialogTitle = this.data[1];
 
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: '500px',
-      data: {
-        dialogTitle: 'Подтвердите действие',
-        message: `Вы действительно хотите удалить категорию: "${this.category.title}"? (сами задачи не удаляются)`
-      },
-      autoFocus: false
-    });
+        // если было передано значение, значит это редактирование, поэтому делаем удаление возможным (иначе скрываем иконку)
+        if (this.category && this.category.id && this.category.id > 0) {
+            this.canDelete = true;
+        }
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
+    // нажали ОК
+    confirm(): void {
+        this.dialogRef.close(new DialogResult(DialogAction.SAVE, this.category));
+    }
 
-      if (!(result)) { // если просто закрыли окно, ничего не нажав
-        return;
-      }
+    // нажали отмену
+    cancel(): void {
+        this.dialogRef.close(new DialogResult(DialogAction.CANCEL));
+    }
+
+    // нажали Удалить
+    delete(): void {
+
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            maxWidth: '500px',
+            data: {
+                dialogTitle: 'Подтвердите действие',
+                message: `Вы действительно хотите удалить категорию: "${this.category.title}"? (сами задачи не удаляются)`
+            },
+            autoFocus: false
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+
+            if (!(result)) { // если просто закрыли окно, ничего не нажав
+                return;
+            }
 
 
-      if (result.action === DialogAction.OK) {
-        this.dialogRef.close(new DialogResult(DialogAction.DELETE)); // нажали удалить
-      }
-    });
+            if (result.action === DialogAction.OK) {
+                this.dialogRef.close(new DialogResult(DialogAction.DELETE)); // нажали удалить
+            }
+        });
 
 
-  }
+    }
 }

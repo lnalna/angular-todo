@@ -1,10 +1,10 @@
-// глобальная переменная для хранения URL
-import {Inject, Injectable, InjectionToken} from '@angular/core';
-import {StatDAO} from '../interface/StatDAO';
-import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Stat} from '../../../model/Stat';
+import {Inject, Injectable, InjectionToken} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StatDAO} from "../interface/StatDAO";
+import {Stat} from "../../../model/Stat";
 
+// глобальная переменная для хранения URL
 export const STAT_URL_TOKEN = new InjectionToken<string>('url');
 
 // класс реализовывает методы доступа к данным с помощью RESTful запросов в формате JSON
@@ -18,7 +18,7 @@ export const STAT_URL_TOKEN = new InjectionToken<string>('url');
 })
 
 // класс не реализовывает и не наследует, т.к. у него только 1 метод
-export class StatService implements StatDAO {
+export class StatService implements StatDAO{
 
   constructor(@Inject(STAT_URL_TOKEN) private baseUrl,
               private http: HttpClient // для выполнения HTTP запросов

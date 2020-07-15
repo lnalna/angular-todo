@@ -3,10 +3,9 @@ import {Task} from '../../model/Task';
 import {Priority} from '../../model/Priority';
 import {Category} from '../../model/Category';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {OperType} from '../OperType';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DialogAction, DialogResult} from '../../object/DialogResult';
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {DialogAction, DialogResult} from '../../object/DialogResult';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-task-dialog',
@@ -18,10 +17,10 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 export class EditTaskDialogComponent implements OnInit {
 
   constructor(
-    private dialogRef: MatDialogRef<EditTaskDialogComponent>, // // для возможности работы с текущим диалог. окном
-    @Inject(MAT_DIALOG_DATA) private data: [Task, string, Category[], Priority[]], // данные, которые передаем в текущее диалоговое окно
-    private dialog: MatDialog, // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
-    private deviceService: DeviceDetectorService // определение устройства пользователя
+      private dialogRef: MatDialogRef<EditTaskDialogComponent>, // // для возможности работы с текущим диалог. окном
+      @Inject(MAT_DIALOG_DATA) private data: [Task, string, Category[], Priority[]], // данные, которые передаем в текущее диалоговое окно
+      private dialog: MatDialog, // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
+      private deviceService: DeviceDetectorService // определение устройства пользователя
   ) {
   }
 
@@ -175,4 +174,5 @@ export class EditTaskDialogComponent implements OnInit {
   setToday() {
     this.newDate = this.today;
   }
+
 }
