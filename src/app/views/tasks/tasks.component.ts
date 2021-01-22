@@ -49,7 +49,7 @@ export class TasksComponent implements OnInit {
     this.fillTable();
   }
 
-  tasks: Task[]; // задачи для отображения в таблице
+  tasks: any; // задачи для отображения в таблице
 
   // поиск
   searchTaskText: string; // текущее значение для поиска задач
@@ -122,25 +122,25 @@ export class TasksComponent implements OnInit {
     // когда получаем новые данные..
     // чтобы можно было сортировать по столбцам "категория" и "приоритет", т.к. там не примитивные типы, а объекты
     // @ts-ignore - показывает ошибку для типа даты, но так работает, т.к. можно возвращать любой тип
-    this.dataSource.sortingDataAccessor = (task, colName) => {
-
-      // по каким полям выполнять сортировку для каждого столбца
-      switch (colName) {
-        case 'priority': {
-          return task.priority ? task.priority.id : null;
-        }
-        case 'category': {
-          return task.category ? task.category.title : null;
-        }
-        case 'date': {
-          return task.date ? task.date : null;
-        }
-
-        case 'title': {
-          return task.title;
-        }
-      }
-    };
+    // this.dataSource.sortingDataAccessor = (task, colName) => {
+    //
+    //   // по каким полям выполнять сортировку для каждого столбца
+    //   switch (colName) {
+    //     case 'priority': {
+    //       return task.priority ? task.priority.id : null;
+    //     }
+    //     case 'category': {
+    //       return task.category ? task.category.title : null;
+    //     }
+    //     case 'date': {
+    //       return task.date ? task.date : null;
+    //     }
+    //
+    //     case 'title': {
+    //       return task.title;
+    //     }
+    //   }
+    // };
 
 
   }

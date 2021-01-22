@@ -85,7 +85,7 @@ registerLocaleData(localeRu);
   providers: [
     {
       provide: TASK_URL_TOKEN,
-      useValue: 'http://localhost:8080/task'
+      useValue: 'http://localhost:8080/UserController'
     },
 
     {

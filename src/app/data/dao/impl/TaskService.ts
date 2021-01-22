@@ -32,7 +32,7 @@ export class TaskService extends CommonService<Task> implements TaskDAO {
 
   // поиск задач по любым параметрам
   findTasks(searchObj: TaskSearchValues): Observable<any> { // из backend получаем тип Page, поэтому указываем any
-    return this.http.post<any>(this.baseUrl + '/search', searchObj);
+    return this.http.get<any>(this.baseUrl + '/create');
   }
 
 

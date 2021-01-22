@@ -17,8 +17,15 @@ import { Task } from './model/Task';
 // компонент-контейнер (Smart, Container), который управляет другими  компонентами (Dumb, Presentational)
 export class AppComponent implements OnInit {
 
-  tasks: Task[]; // текущие задачи для отображения на странице
-  categories: Category[]; // все категории
+  tasks: any; // текущие задачи для отображения на странице
+   categories: Category[] = [
+    {id: 1, title: 'Работа', completedCount: 0, uncompletedCount: 0},
+    {id: 2, title: 'Семья', completedCount: 0, uncompletedCount: 0},
+    {id: 3, title: 'Учеба', completedCount: 0, uncompletedCount: 0},
+    {id: 4, title: 'Отдых', completedCount: 0, uncompletedCount: 0},
+    {id: 5, title: 'Спорт', completedCount: 0, uncompletedCount: 0},
+
+  ];
 
   // статистика
   uncompletedCountForCategoryAll: number;
@@ -148,18 +155,18 @@ export class AppComponent implements OnInit {
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
   fillAllCategories() {
 
-    this.categoryService.findAll().subscribe(result => {
-      this.categories = result;
-    });
+    // this.categoryService.findAll().subscribe(result => {
+    //   this.categories = result;
+    // });
 
 
   }
 
   // поиск категории
   searchCategory(categorySearchValues: CategorySearchValues) {
-    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
-      this.categories = result;
-    });
+    // this.categoryService.findCategories(categorySearchValues).subscribe(result => {
+    //   this.categories = result;
+    // });
   }
 
 
@@ -188,7 +195,9 @@ export class AppComponent implements OnInit {
 
     this.taskService.findTasks(this.taskSearchValues).subscribe(result => {
       this.tasks = result.content; // массив задач
+      //вывод в консоль для теста ShopTest  UserController create
       console.log(result);
+      console.log("app.component.ts строка 199");
     });
 
 
