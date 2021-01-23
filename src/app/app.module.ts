@@ -39,6 +39,7 @@ import {TASK_URL_TOKEN} from './data/dao/impl/TaskService';
 import {CATEGORY_URL_TOKEN} from './data/dao/impl/CategoryService';
 import {PRIORITY_URL_TOKEN} from './data/dao/impl/PriorityService';
 import {STAT_URL_TOKEN} from './data/dao/impl/StatService';
+import { UsersComponent } from './views/users/users.component';
 
 registerLocaleData(localeRu);
 
@@ -58,7 +59,8 @@ registerLocaleData(localeRu);
     StatCardComponent,
     PrioritiesComponent,
     SettingsDialogComponent,
-    EditPriorityDialogComponent
+    EditPriorityDialogComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,7 @@ import {CategoryService} from './data/dao/impl/CategoryService';
 import {IntroService} from './service/intro.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {TaskService} from './data/dao/impl/TaskService';
-import { Task } from './model/Task';
+import {User} from './model/User';
 
 
 @Component({
@@ -17,7 +17,8 @@ import { Task } from './model/Task';
 // компонент-контейнер (Smart, Container), который управляет другими  компонентами (Dumb, Presentational)
 export class AppComponent implements OnInit {
 
-  tasks: any; // текущие задачи для отображения на странице
+  user: User; // данные для оторбражения
+
    categories: Category[] = [
     {id: 1, title: 'Работа', completedCount: 0, uncompletedCount: 0},
     {id: 2, title: 'Семья', completedCount: 0, uncompletedCount: 0},
@@ -194,7 +195,7 @@ export class AppComponent implements OnInit {
     this.taskSearchValues = searchTaskValues;
 
     this.taskService.findTasks(this.taskSearchValues).subscribe(result => {
-      this.tasks = result.content; // массив задач
+      this.user = result; // массив задач
       //вывод в консоль для теста ShopTest  UserController create
       console.log(result);
       console.log("app.component.ts строка 199");
