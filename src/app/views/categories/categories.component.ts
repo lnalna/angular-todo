@@ -131,9 +131,9 @@ export class CategoriesComponent implements OnInit {
   showCategory(category: Category) {
 
     // если не изменилось значение, ничего не делать (чтобы лишний раз не делать запрос данных)
-    if (this.selectedCategory === category) {
-      return;
-    }
+    // if (this.selectedCategory === category) {
+    //   return;
+    // }
 
     this.selectedCategory = category; // сохраняем выбранную категорию
     this.selectCategory.emit(this.selectedCategory); // вызываем внешний обработчик

@@ -79,11 +79,11 @@
         <a class="nav-link">
 
           <!--          название категории-->
-          <span class="all-category-title">Все</span>
+<!--          <span class="all-category-title">Все</span>-->
 
 
           <!--сколько невыполненных задач-->
-          <span class="uncompleted-count"> {{uncompletedCountForCategoryAll || 0}}</span>
+<!--          <span class="uncompleted-count"> {{uncompletedCountForCategoryAll || 0}}</span>-->
 
         </a>
       </li>
@@ -98,12 +98,6 @@
 
         *ngFor="let category of categories, let index = index"
 
-
-        [class.active]="(selectedCategory && category) && category.id === selectedCategory.id"
-
-
-        (mouseleave)="showEditIcon(false, index)"
-        (mouseenter)="showEditIcon(true, index)"
 
         (click)="showCategory(category)"
 

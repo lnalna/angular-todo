@@ -20,11 +20,11 @@ export class AppComponent implements OnInit {
   user: User; // данные для оторбражения
 
    categories: Category[] = [
-    {id: 1, title: 'Работа', completedCount: 0, uncompletedCount: 0},
-    {id: 2, title: 'Семья', completedCount: 0, uncompletedCount: 0},
-    {id: 3, title: 'Учеба', completedCount: 0, uncompletedCount: 0},
-    {id: 4, title: 'Отдых', completedCount: 0, uncompletedCount: 0},
-    {id: 5, title: 'Спорт', completedCount: 0, uncompletedCount: 0},
+    {id: 1, title: 'UserController.create', completedCount: 0, uncompletedCount: 0},
+    // {id: 2, title: 'Семья', completedCount: 0, uncompletedCount: 0},
+    // {id: 3, title: 'Учеба', completedCount: 0, uncompletedCount: 0},
+    // {id: 4, title: 'Отдых', completedCount: 0, uncompletedCount: 0},
+    // {id: 5, title: 'Спорт', completedCount: 0, uncompletedCount: 0},
 
   ];
 
